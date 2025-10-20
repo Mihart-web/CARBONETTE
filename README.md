@@ -3,7 +3,7 @@
 ![Status](https://img.shields.io/badge/status-stable-brightgreen)
 ![Backend](https://img.shields.io/badge/backend-FastAPI-orange)
 ![Engine](https://img.shields.io/badge/engine-Carbonette-blueviolet)
-[Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Colab%20%7C%20Linux-lightgrey)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Colab%20%7C%20Linux-lightgrey)
 
 # CARBONETTE CNT/HNT pipeline v1.0.0
 Author: M. Vengher
