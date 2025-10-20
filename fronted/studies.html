@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Carbonette — Studies, arXiv & References</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      color-scheme: dark;
+      --ink:#0b0e14; --fg:#e7eeff; --muted:#b7beca;
+      --card:#161922C7; --line:#2b313d; --field:#0f131b; --focus:#6d7cff;
+      --glx1: rgba(109,124,255,.55); --glx2: rgba(10,179,255,.45);
+      --glring: 0 0 20px var(--glx1), 0 0 45px var(--glx2), inset 0 0 12px rgba(255,255,255,.15);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--ink) url("./bg.jpg") center/cover fixed no-repeat;
+      color:var(--fg); font-family:system-ui, Arial, sans-serif;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+    .brand{font-family:"Courier New",monospace;letter-spacing:.5em;transform:scaleY(.6);
+      font-weight:680;font-size:clamp(40px,5vw,72px);text-transform:uppercase;
+      color:transparent;background:linear-gradient(180deg,#f6f8ff,#9bb8ff);
+      -webkit-background-clip:text;background-clip:text; text-shadow:0 0 30px rgba(10,179,255,.35);}
+    .nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    a.btn{display:inline-block;padding:8px 12px;border-radius:10px;border:1px solid #2a3140;
+      background:linear-gradient(180deg,#1a2033,#10172a);color:#cfe1ff;text-decoration:none;box-shadow:var(--glring)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--glring);margin:16px 0}
+    h1{font-size:1.9rem;margin:.2em 0 .3em}
+    h2{font-size:1.4rem;margin:1em 0 .4em}
+    p{color:#d5def3;margin:.5em 0}
+    .muted{color:#aab2bf}
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+    input[type="search"]{
+      flex:1 1 260px;background:var(--field);border:1px solid #2a3140;color:#e6e6e6;
+      padding:10px 12px;border-radius:10px;outline:none; box-shadow:inset 0 0 0 1px rgba(109,124,255,.15);
+    }
+    input[type="search"]:focus{border-color:var(--focus);box-shadow:0 0 0 2px rgba(109,124,255,.25), var(--glring)}
+    .count{font-size:.95rem;color:#cfe1ff}
+
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+    .paper{background:rgba(20,26,38,.7);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--glring)}
+    .title{font-weight:800;line-height:1.25}
+    .authors{color:#c7d3f7;font-size:.95rem}
+    .meta{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{display:inline-block;background:#0b1b3a;color:#9ec7ff;padding:.18em .55em;border-radius:999px;font-size:.8rem;border:1px solid #1f3a6b}
+    .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+    .linkbtn{display:inline-block;padding:8px 10px;border-radius:10px;border:1px solid #2a3140;
+      background:linear-gradient(180deg,#22283a,#171c2b);color:#dbe6ff;text-decoration:none;font-weight:700;box-shadow:var(--glring)}
+    .linkbtn:hover{filter:brightness(1.08)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">CARBONETTE</div>
+      <div>
+        <a class="btn" href="fronted_index.html">← Back to Analyzer</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h1>Studies • arXiv & References</h1>
+      <p class="muted">Curated list of papers relevant to CNT/HNT, PAHs, ices, and mid-IR spectroscopy. Clean arXiv links, authors, year. Use the search box to filter.</p>
+      <div class="toolbar">
+        <input id="q" type="search" placeholder="Filter by title, author, year, tag…" />
+        <span id="cnt" class="count"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div id="list" class="grid"></div>
+    </div>
+  </div>
+
+  <script>
+    // === Data (clean arXiv links) ===
+    const PAPERS = [
+      {
+        title: "On Carbon Nanotubes in the Interstellar Medium",
+        authors: "Qi Li, Aigen Li, B.W. Jiang, Tao Chen",
+        arxiv: "2002.05588",
+        year: 2020,
+        tags: ["CNT","nanotubes","ISM"]
+      },
+      {
+        title: "Synthesizing carbon nanotubes in space",
+        authors: "Tao Chen, Aigen Li",
+        arxiv: "1909.09182",
+        year: 2019,
+        tags: ["CNT","nanotubes","theory"]
+      },
+      {
+        title: "Modelling methanol and hydride formation in the JWST Ice Age era",
+        authors: "Izaskun Jiménez-Serra, Andrés Megías, Joseph Salaris, et al.",
+        arxiv: "2502.10123",
+        year: 2025,
+        tags: ["ices","chemistry","JWST"]
+      },
+      {
+        title: "JWST/MIRI-MRS view of the metal-poor galaxy CGCG 007-025: the spatial location of PAHs and very highly ionized gas",
+        authors: "Macarena G. del Valle-Espinosa, Matilde Mingozzi, Bethan James, et al.",
+        arxiv: "2510.11581",
+        year: 2025,
+        tags: ["PAH","MIRI","ionized gas"]
+      },
+      {
+        title: "Polycyclic aromatic hydrocarbon (PAH) abundances in the disk around T Chamaeleontis (T Cha): PAH sizes, ionization fraction, and mass during JWST observations",
+        authors: "Rahul Bandyopadhyay, Simon Casassus (and collaborators)",
+        arxiv: "2509.21238",
+        year: 2025,
+        tags: ["PAH","protoplanetary disks","JWST"]
+      },
+      {
+        title: "Detection of CH3+ in the O-rich planetary nebula NGC 6302",
+        authors: "Charmi Bhatt, Jan Cami, Els Peeters, Nicholas Clark, et al.",
+        arxiv: "2509.14556",
+        year: 2025,
+        tags: ["molecules","PN","JWST"]
+      },
+      {
+        title: "Polycyclic Aromatic Hydrocarbons (PAHs) in the High-redshift Universe: Prospect of the PRIMA FIRESS low-resolution spectroscopy",
+        authors: "Ilsang Yoon, Brandon Hensley, Thomas S.-Y. Lai, et al.",
+        arxiv: "2509.02470",
+        year: 2025,
+        tags: ["PAH","high-z","PRIMA","FIRESS"]
+      },
+      {
+        title: "JWST observations of the Ring Nebula (NGC 6720) — II. PAH emission",
+        authors: "Nicholas Clark, Els Peeters, Nick L. J. Cox, et al.",
+        arxiv: "2508.03451",
+        year: 2025,
+        tags: ["PAH","JWST","Ring Nebula"]
+      },
+      {
+        title: "CO desorption from interstellar icy grains induced by IR excitation of superhydrogenated PAHs",
+        authors: "L. Slumstrup, J. D. Thrower, A. T. Hopkinson, G. Wenzel, et al.",
+        arxiv: "2507.07896",
+        year: 2025,
+        tags: ["PAH","ices","laboratory"]
+      },
+      {
+        title: "Polycyclic Aromatic Hydrocarbons in the circumstellar medium of Herbig Ae/Be stars",
+        authors: "R. Arun, Blesson Mathew, B. Shridharan, K. Ujjwal, Akhil Krishna R, G. Maheswar, Sreeja S. Kartha",
+        arxiv: "2506.14218",
+        year: 2025,
+        tags: ["PAH","HAeBe","circumstellar"]
+      }
+    ];
+
+    function arxivAbs(id){ return `https://arxiv.org/abs/${id}`; }
+    function arxivPdf(id){ return `https://arxiv.org/pdf/${id}.pdf`; }
+
+    const list = document.getElementById('list');
+    const q = document.getElementById('q');
+    const cnt = document.getElementById('cnt');
+
+    function render(items){
+      list.innerHTML = '';
+      cnt.textContent = `${items.length} paper${items.length===1?'':'s'}`;
+      for(const p of items){
+        const card = document.createElement('div');
+        card.className = 'paper';
+        const t = document.createElement('div');
+        t.className='title';
+        t.textContent = p.title;
+        const a = document.createElement('div');
+        a.className='authors';
+        a.textContent = p.authors;
+        const m = document.createElement('div');
+        m.className='meta';
+        const year = document.createElement('span'); year.className='pill'; year.textContent = p.year;
+        m.appendChild(year);
+        (p.tags||[]).forEach(tag=>{
+          const s=document.createElement('span'); s.className='pill'; s.textContent=tag; m.appendChild(s);
+        });
+        const links = document.createElement('div');
+        links.className='links';
+        const abs = document.createElement('a'); abs.className='linkbtn'; abs.href=arxivAbs(p.arxiv); abs.target='_blank'; abs.rel='noopener'; abs.textContent='Abstract';
+        const pdf = document.createElement('a'); pdf.className='linkbtn'; pdf.href=arxivPdf(p.arxiv); pdf.target='_blank'; pdf.rel='noopener'; pdf.textContent='PDF';
+        links.appendChild(abs); links.appendChild(pdf);
+
+        card.appendChild(t); card.appendChild(a); card.appendChild(m); card.appendChild(links);
+        list.appendChild(card);
+      }
+    }
+
+    function norm(s){ return (s||'').toLowerCase(); }
+
+    function filter(){
+      const needle = norm(q.value.trim());
+      if(!needle){ render(PAPERS); return; }
+      const out = PAPERS.filter(p=>{
+        const hay = [p.title, p.authors, String(p.year), ...(p.tags||[])].map(norm).join(' ');
+        return hay.includes(needle);
+      });
+      render(out);
+    }
+
+    q.addEventListener('input', filter);
+    render(PAPERS);
+  </script>
+</body>
+</html>
