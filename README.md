@@ -60,6 +60,12 @@ CARBONETTE is a sophisticated automated pipeline for detecting Carbon NanoTube (
 - **Continuum model comparison** (linear vs quadratic fitting)
 - **Rebinning consistency checks** across resolutions
 
+<p align="center">
+  <img src="fronted/carbonette_site4.jpg" alt="Carbonette Website Preview" width="800">
+</p>
+
+
+
 ### 🎯 **Physical Validation**
 - **Template matching** against established CNT/HNT models (Chen & Li 2020)
 - **Best-fit identification** with Δχ² minimization
@@ -137,6 +143,7 @@ The pipeline implements methodologies from established astronomical spectroscopy
 - Contamination avoidance strategies
 
 ---
+
 
 **CARBONETTE represents a comprehensive, validation-focused approach to spectral feature detection, implementing professional-grade astronomical analysis techniques in an automated, reproducible framework.**
 
