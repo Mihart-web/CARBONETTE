@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Carbonette — CNT/HNT Analyzer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- MathJax for formulas in About -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      color-scheme: dark;
+      --ink:#0b0e14;
+      --fg:#e7eeff;
+      --muted:#b7beca;
+      --card:#161922C7;
+      --line:#2b313d;
+      --field:#0f131b;
+      --focus:#6d7cff;
+      --gl1:#ffffff; --gl2:#b7c7ff; --gl3:#3a56ff; --gl4:#0ab3ff;
+      --glx1: rgba(109,124,255,.55);
+      --glx2: rgba(10,179,255,.45);
+      --glring: 0 0 20px var(--glx1), 0 0 45px var(--glx2), inset 0 0 12px rgba(255,255,255,.15);
+      --pdfH: 80vh; /* default PDF preview height (tweak via slider) */
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--ink) url("./bg.jpg") center/cover fixed no-repeat;
+      color:var(--fg); font-family:system-ui, Arial, sans-serif;
+      overflow-x:hidden;
+    }
+    .overlay{
+      min-height:100dvh;
+      background:radial-gradient(80% 60% at 50% 20%,
+        rgba(15,17,23,.65)0%, rgba(11,14,20,.85)60%, rgba(10,12,18,.95)100%);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 50px}
+
+    /* NAV */
+    .nav{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px}
+    .menu{display:flex;gap:12px;align-items:center}
+    .menu a{
+      color:#cfe1ff;text-decoration:none;font-size:14px;
+      padding:8px 10px;border-radius:10px;border:1px solid transparent;
+      transition:filter .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+    .menu a:hover{background:#141a26;border-color:#2a3140;box-shadow:var(--glring); transform:translateY(-1px)}
+
+    .dropdown{position:relative}
+    .dropdown>button{
+      background:linear-gradient(180deg,#22283a 0%, #171c2b 100%);
+      color:#cfe1ff;border:1px solid #2a3140;
+      padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:600;
+      box-shadow:var(--glring);
+    }
+    .dropdown:hover>.menu-panel{opacity:1;visibility:visible;transform:translateY(0)}
+    .menu-panel{
+      position:absolute;right:0;top:calc(100% + 8px);
+      background:#121723;border:1px solid #2a3140;border-radius:12px;
+      min-width:260px;padding:8px;box-shadow:0 12px 30px rgba(0,0,0,.35);
+      opacity:0;visibility:hidden;transform:translateY(-6px);transition:.18s ease;z-index:20
+    }
+    .menu-panel a{
+      display:flex;justify-content:space-between;align-items:center;
+      color:#dde6ff;text-decoration:none;font-size:14px;
+      padding:10px 10px;border-radius:10px;
+      border:1px solid transparent;
+      transition: box-shadow .15s ease, background .15s ease, transform .12s ease;
+    }
+    .menu-panel a small{color:#89a2ff;opacity:.9}
+    .menu-panel a:hover{
+      background:#171e2b;
+      box-shadow:var(--glring);
+      text-shadow: 0 0 6px rgba(160,180,255,.5);
+      transform: translateY(-1px);
+      border-color:#33406b;
+    }
+
+    /* BRAND */
+    .brand{
+      font-family:"Courier New", Courier, monospace;
+      text-transform:uppercase;
+      font-weight:680;
+      font-size:clamp(40px,5vw,72px);
+      letter-spacing:.54em;
+      transform:scaleY(.60);
+      transform-origin:center;
+      color:transparent;
+      background:linear-gradient(180deg,#f6f8ff 0%,#dbe5ff 45%,#b5c7ff 80%,#9bb8ff 100%);
+      -webkit-background-clip:text;background-clip:text;
+      text-shadow:
+        0 0 2px var(--gl1),
+        0 0 8px var(--gl2),
+        0 0 18px var(--gl3),
+        0 0 34px var(--gl4),
+        0 0 70px rgba(61,140,255,.45);
+      animation:breath 5.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(58,86,255,.45)) drop-shadow(0 0 60px rgba(10,179,255,.35));
+    }
+    @keyframes breath{
+      0%,100%{
+        text-shadow:0 0 1px var(--gl1),0 0 6px var(--gl2),0 0 14px var(--gl3),0 0 26px var(--gl4);
+        filter:saturate(.95) brightness(.98);
+      }
+      50%{
+        text-shadow:0 0 3px var(--gl1),0 0 12px var(--gl2),0 0 28px var(--gl3),0 0 52px var(--gl4);
+        filter:saturate(1.1) brightness(1.05);
+      }
+    }
+    .brand-glow{
+      height:12px;border-radius:999px;margin:8px 0 18px;
+      background:
+        radial-gradient(50% 100% at 50% 50%,rgba(58,86,255,.55)0%,rgba(58,86,255,0)70%),
+        radial-gradient(50% 100% at 50% 50%,rgba(10,179,255,.50)0%,rgba(10,179,255,0)80%);
+      filter:blur(10px);opacity:.95;animation:breathGlow 5.5s ease-in-out infinite;
+      box-shadow:0 0 35px rgba(58,86,255,.45), 0 0 65px rgba(10,179,255,.35);
+    }
+    @keyframes breathGlow{0%,100%{opacity:.75}50%{opacity:1}}
+
+    .subtitle{margin:0 0 18px;color:var(--muted)}
+
+    /* TABS */
+    .tabs{display:flex;gap:10px;margin-bottom:14px}
+    .tab{
+      padding:8px 12px;border:1px solid #2a3140;border-radius:10px;cursor:pointer;
+      background:linear-gradient(180deg,#1a2033 0%, #10172a 100%);
+      box-shadow:var(--glring)
+    }
+    .tab.active{background:#141a26}
+    .hidden{display:none}
+
+    /* CARD / FORM */
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:16px;
+      padding:16px;backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(0,0,0,.25), var(--glring);
+      margin-bottom:20px;max-width:920px
+    }
+    .row{display:grid;grid-template-columns:1fr 150px;gap:12px}
+    label span{display:block;font-size:12px;color:#cbd3df;margin-bottom:6px}
+    input[type="text"],input[type="number"]{
+      width:100%;background:var(--field);border:1px solid #2a3140;color:#e6e6e6;
+      padding:10px 12px;border-radius:10px;outline:none; box-shadow:inset 0 0 0 1px rgba(109,124,255,.15);
+    }
+    input:focus{border-color:var(--focus);box-shadow:0 0 0 2px rgba(109,124,255,.25), var(--glring)}
+    .controls{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+
+    button{
+      background:
+        radial-gradient(120% 120% at 30% 20%, rgba(140,154,255,.35) 0%, rgba(140,154,255,0) 60%),
+        linear-gradient(180deg,#7d8aff 0%, #5e6bff 100%);
+      color:#fff;border:none;padding:10px 16px;border-radius:12px;font-weight:700;cursor:pointer;
+      box-shadow:0 12px 28px rgba(94,107,255,.45), 0 0 22px rgba(10,179,255,.35), inset 0 1px 0 rgba(255,255,255,.25)
+    }
+    button:hover{filter:brightness(1.08)}
+    button:disabled{opacity:.6;cursor:default;box-shadow:none}
+
+    .glowbtn{
+      display:inline-block;padding:10px 14px;border-radius:12px;text-decoration:none;
+      color:#e7eeff;font-weight:800;letter-spacing:.04em;
+      background:linear-gradient(180deg,rgba(25,31,48,.85), rgba(18,24,36,.85));
+      border:1px solid rgba(94,107,255,.85);
+      box-shadow:
+        0 0 14px rgba(94,107,255,.55),
+        0 0 32px rgba(10,179,255,.45),
+        inset 0 0 22px rgba(94,107,255,.25),
+        inset 0 0 44px rgba(10,179,255,.15);
+    }
+    .glowbtn:hover{filter:brightness(1.1)}
+
+    /* Output & History */
+    .muted{color:#aab2bf}.warn{color:#fbbf24}.err{color:#f87171}
+    .stack{display:flex;flex-direction:column;gap:12px}
+    .spinner{
+      width:18px;height:18px;border-radius:50%;
+      border:3px solid rgba(255,255,255,.2);border-top-color:#fff;animation:spin 1s linear infinite;
+      display:inline-block;vertical-align:middle;margin-left:10px
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    pre{
+      white-space:pre-wrap;overflow-wrap:anywhere;
+      background:#0e1320;border:1px solid #2a3140;color:#e8eeff;padding:10px;border-radius:10px
+    }
+    .list{display:grid;gap:10px}
+    .runcard{padding:12px;border:1px solid var(--line);border-radius:12px;background:rgba(20,26,38,.6);box-shadow:var(--glring)}
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+    .thumb{background:var(--field);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+    .thumb img{display:block;width:100%;height:220px;object-fit:contain;background:#0e1320}
+
+    /* PDF wrapper resizable + iframe */
+    .pdf-wrap{
+      background:#0e1320;
+      border:1px solid var(--line);
+      border-radius:12px;
+      overflow:auto;
+      resize:vertical;     /* drag on the bottom edge to resize */
+      min-height:50vh;
+      max-height:95vh;
+      box-shadow:var(--glring);
+    }
+    .thumb iframe{
+      display:block;
+      width:100%;
+      height:var(--pdfH);  /* controlled by slider */
+      border:none;
+      background:#0e1320;
+    }
+
+    .files a{color:#aeb7ff;text-decoration:none}
+
+    /* ===== About panel (dark-styled) ===== */
+    #panel-about .about-wrap{
+      max-width:960px;margin:0 auto;
+      line-height:1.6;color:#e9edff;
+    }
+    #panel-about h2{font-size:1.9rem;margin:.6em 0}
+    #panel-about h3{font-size:1.25rem;margin:1.2em 0 .4em}
+    #panel-about p{margin:.6em 0}
+    #panel-about code{background:#0f172a;padding:.12em .35em;border-radius:4px;border:1px solid #1f2a44}
+    #panel-about .pill{display:inline-block;background:#0b1b3a;color:#9ec7ff;padding:.2em .55em;border-radius:999px;font-size:.85rem;border:1px solid #1f3a6b}
+    #panel-about .card-lite{border:1px solid #293247;border-radius:12px;padding:14px 16px;background:#0e1422}
+    #panel-about .grid{display:grid;gap:12px}
+    @media (min-width: 760px){ #panel-about .grid.cols-2{grid-template-columns:1fr 1fr}}
+    #panel-about table{border-collapse:collapse;width:100%;font-size:.95rem}
+    #panel-about th,#panel-about td{border:1px solid #293247;padding:8px 10px;text-align:left}
+    #panel-about th{background:#111a2b}
+    #panel-about .ok{color:#6bff9a;font-weight:600}
+    #panel-about .warn{color:#ffd27a;font-weight:600}
+    #panel-about .no{color:#9aa4b2;font-weight:600}
+    #panel-about details{border:1px dashed #2a3852; border-radius:10px; padding:10px 14px; background:#0b1220}
+    #panel-about summary{cursor:pointer; font-weight:700}
+    #panel-about a{color:#9ec7ff}
+  </style>
+</head>
+<body>
+<div class="overlay">
+  <div class="wrap">
+    <!-- NAVBAR -->
+    <div class="nav">
+      <div>
+        <div class="brand">CARBONETTE</div>
+        <div class="brand-glow"></div>
+      </div>
+      <div class="menu">
+        <a href="#" data-tabbtn="analyze">Analyze</a>
+        <a href="#" data-tabbtn="history">History</a>
+        <div class="dropdown">
+          <button>Menu</button>
+          <div class="menu-panel">
+            <a href="./about.html">About <small>How it works</small></a>
+            <a href="./catalogo.html">TEST CATALOG <small>40 objects tested</small></a>
+            <a href="#">User <small>Login & personal library WIP</small></a>
+            <a href="./studies.html">Studies <small>arXiv & references</small></a>
+            <a href="#">CARBONETTE <small>JWST analyzer · WIP</small></a>
+            <a href="#">BELLEROPHONTE <small>WIP interface</small></a>
+            <a href="./cnt.html">CNT/HNT <small>What are CNT</small></a>
+            <a href="#">Report BUG <small>· WIP</small></a>
+            <a href="#">Contact <small>· WIP</small></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="subtitle">
+      Object name or RA/DEC (e.g., <b>CSS_657</b>, <b>NGC 7023</b>, <b>267.88828 -6.40104</b>) — detect possible CNT/HNT signal
+    </p>
+    <p class="subtitle">
+      The engine analyzes each object by downloading raw data from IRSA and converting it into an input_001.tbl file if the object has only one spectroscopy. Typical runtime ranges from 5 to 40 seconds. Please note that in the Enhanced Products Catalog, some objects may have up to 100 individual spectra. In such cases, the engine will process each spectrum sequentially and generate a full set of output files for each one. This may take several hours — so please be patient, and in the meantime, go grab a snack and a cup of tea! ☕
+      OR chek the HISTORY tab.
+    </p>
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" data-tab="analyze">Analyze</button>
+      <button class="tab" data-tab="history">History</button>
+      <button class="tab" data-tab="about">About</button>
+    </div>
+
+    <!-- ANALYZE -->
+    <div id="panel-analyze">
+      <div class="card">
+        <form id="f">
+          <div class="row">
+            <label>
+              <span>Object name or RA/DEC</span>
+              <input id="obj" type="text" placeholder="CSS_657" value="CSS_657" required />
+            </label>
+            <label>
+              <span>Radius (arcsec)</span>
+              <input id="rad" type="number" min="1" step="1" value="20" />
+            </label>
+          </div>
+          <div class="controls">
+            <button id="go" type="submit">Analyze</button>
+            <a class="glowbtn" href="https://irsa.ipac.caltech.edu/workspace/TMP_wE95AY_32284/Gator/irsa/14923/tbview.html" target="_blank" rel="noopener">
+              Spitzer IRSA Enhanced Products Catalog
+            </a>
+            <span id="hint" class="muted"></span>
+          </div>
+
+          <!-- Slider altezza preview PDF -->
+          <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+            <label class="muted" for="pdfH">Preview height</label>
+            <input id="pdfH" type="range" min="50" max="95" step="1" value="80" />
+            <span id="pdfHval" class="muted">80vh</span>
+          </div>
+        </form>
+      </div>
+
+      <div id="out" class="stack"></div>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="panel-history" class="hidden">
+      <div class="card">
+        <h3 style="margin:0 0 8px">History</h3>
+        <p class="muted" style="margin-bottom:10px">Browse archived runs by object. Click an object to see all timestamps; click a run to preview files.</p>
+        <div id="history-objects" class="list" style="margin-top:10px"></div>
+        <div id="history-object-runs" class="list" style="margin-top:16px"></div>
+        <div id="history-run-view" class="stack" style="margin-top:16px"></div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div id="panel-about" class="hidden">
+      <div class="card">
+        <div class="about-wrap">
+  <h2>Carbonette — The Engine</h2>
+  <p><span class="pill">Purpose</span> Carbonette scans real infrared spectra and highlights places where
+    <em>carbon nanotube</em> (CNT) and <em>hydrogenated nanotube</em> (HNT) bands might be hiding.
+    This analysis engine is based on publicly available Spitzer spectra (IRSA Enhanced Products) 
+    and tests the infrared bands predicted for carbon nanotubes by Chen & Li (2019, 2022). 
+    The authors of those studies are not affiliated with or responsible for this project.
+  <p><span class="pill">Think of it as a careful filter: it doesn’t “declare discoveries”, it shows where the data deserve a closer look.</span>
+
+  <h3>1) Input & Pre-processing</h3>
+  <p>Carbonette ingests wavelength ($\lambda$), flux density($F$),flags and uncertainty ($\sigma$) arrays from public archives
+    (Spitzer/IRSA, JWST(work in progress... tables, etc.)). Optional <em>rebinning</em> combines adjacent samples with inverse-variance
+    weights to improve S/N without biasing the mean.</p>
+
+  <details>
+    <summary>Rebin math</summary>
+    <p>For groups of $n$ points: $\bar F = \dfrac{\sum w_i F_i}{\sum w_i}$ with $w_i=1/\sigma_i^2$,
+      and $\bar\sigma = \left(\sum w_i\right)^{-1/2}$.</p>
+  </details>
+
+  <h3>2) Continuum modelling with masks</h3>
+  <p>We fit a smooth continuum $C(\lambda)$ using <em>anchor windows</em> away from known features.
+    Masks exclude PAHs, ices, silicates, and atomic/molecular lines so they don’t bias the fit.
+    The mask atlas is compiled from the literature (see <strong>Sources</strong> below).</p>
+
+  <details>
+    <summary>Continuum model</summary>
+    <p>Default is a weighted line around a pivot $\lambda_p$:
+      $$C(\lambda) = a + b\,(\lambda-\lambda_p),$$
+      with parameters from weighted least squares. For stability checks Carbonette can try a quadratic model.</p>
+  </details>
+
+  <h3>3) Residuals & band statistics</h3>
+  <p>After removing the continuum we look for coherent <em>deficits</em> (possible absorption) inside each CNT/HNT band:</p>
+  <p>Normalized residual: $$R(\lambda)=\dfrac{C(\lambda)-F(\lambda)}{\max(C(\lambda),\epsilon)}.$$</p>
+  <p>Integrated significance over a band $B$:
+    $$\mathrm{SNR}_B=\frac{\sum_{\lambda_i\in B} R_i/\sigma_i}{\sqrt{N_B}}\quad \text{(approx.)}$$
+    or, with exact weights,
+    $$\mathrm{SNR}_B=\frac{\sum R_i/\sigma_i^2}{\sqrt{\sum 1/\sigma_i^2}}.$$</p>
+
+  <div class="grid cols-2">
+    <div class="card-lite">
+      <strong>Example A — quick intuition</strong>
+      <p>Suppose a 15% dip across a 0.20&nbsp;µm window. Then</p>
+      <p>Equivalent width: $EW \approx 0.15 \times 0.20 = 0.030\,\mu\mathrm{m}$.</p>
+      <p>Mean optical depth: $\bar\tau = -\ln(1-0.15) = 0.162$.</p>
+    </div>
+    <div class="card-lite">
+      <strong>Example B — weighted SNR</strong>
+      <p>In a band with five samples and uncertainties $\sigma = (0.02,\dots)$, compute weights $w=1/\sigma^2$,
+        sum $\sum wR$ and normalize by $\sqrt{\sum w}$ to get $\mathrm{SNR}_B$.</p>
+    </div>
+  </div>
+
+  <h3>4) Matched filters & calibration</h3>
+  <p>To boost weak but coherent shapes, Carbonette correlates residuals with a kernel that mimics the instrument
+    line-spread function (LSF). It also runs injection–recovery simulations:
+    we plant synthetic dips of known depth and measure how often the pipeline recovers them. This yields a
+    calibration curve $P(\text{YES}\mid\text{depth})$ per band.</p>
+
+  <h3>5) SAFE checks (automatic sanity tests)</h3>
+  <ul>
+    <li><strong>Rebin stability</strong> (1× vs 2×): signal sign and amplitude remain consistent.</li>
+    <li><strong>Edge test</strong>: shrink the window by ±0.05&nbsp;µm → no flip.</li>
+    <li><strong>Jackknife</strong>: drop individual points → median SNR still ≥ marginal threshold.</li>
+    <li><strong>Model swap</strong>: linear vs quadratic continuum → feature persists.</li>
+    <li><strong>PAH-leak index</strong>: protects the 10.6–10.9&nbsp;µm window from the 11.2&nbsp;µm PAH tail.</li>
+  </ul>
+
+  <h3>6) Verdicts & multiple-band logic</h3>
+  <p>Each band gets a label based on SNR thresholds (e.g., YES if $\mathrm{SNR}\ge 3$, MARG if $2\le\mathrm{SNR}<3$),
+    cross-checked by the matched filter and SAFE tests. Carbonette then applies a false-discovery-rate (FDR)
+    correction when many bands are tested together.</p>
+  
+<p>1. Signal-to-Noise Ratio (S/N) calculation with proper error propagation</p>
+
+<p>2. Δχ² Significance Testing for feature detection confidence</p>
+
+<p>3. Equivalent Width (EW) and Mean Optical Depth (τ) measurements</p>
+
+Multi-threshold Classification:
+✅ Primary S/N ≥ 3.0σ AND √Δχ² ≥ 3.0σ
+✅ SAFE variant confirmation (where applicable)  
+✅ LSF resolution adequacy (width/LSF > 5)
+✅ Injection-recovery rate ≥ 80% at relevant depth
+✅ Stability tests passed (rebin, edge, jackknife, poly2)
+✅ Template matching consistency
+✅ FDR-corrected significance
+
+<p>MARGINAL: 2.0σ ≤ S/N < 3.0σ</p>
+
+<p>NO: S/N < 2.0σ</p>
+
+  <table aria-label="Per-band example">
+    <thead>
+      <tr><th>Band (µm)</th><th>SNR</th><th>z (from Δχ²)</th><th>EW (µm)</th><th>⟨τ⟩</th><th>Verdict</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>5.3</td><td>-6.2</td><td>6.4</td><td>-0.003</td><td>-0.007</td><td><span class="no">NO</span></td></tr>
+      <tr><td>10.7</td><td>-22.5</td><td>22.4</td><td>-0.009</td><td>-0.035</td><td><span class="no">NO</span></td></tr>
+      <tr><td>12.9</td><td>10.5</td><td>10.5</td><td>+0.008</td><td>+0.024</td><td class="ok">YES (detection)</td></tr>
+      <tr><td>17.0</td><td>-1.9</td><td>2.2</td><td>-0.001</td><td>-0.004</td><td><span class="no">NO</span></td></tr>
+    </tbody>
+  </table>
+
+  <h3>7) Outputs</h3>
+  <p>For each object Carbonette produces: plots of continuum & residuals, per-band CSV/LaTeX tables, a compact PDF
+    summary, and a JSON manifest with all settings. It’s designed for reproducibility and easy sharing.</p>
+
+  <h3>Why masks matter (and where they come from)</h3>
+  <p>Continuum anchors deliberately avoid known spectral features so CNT/HNT tests are not contaminated.
+    Mask windows are compiled from peer-reviewed literature, including:</p>
+  <ul>
+    <li><strong>CNT/HNT bands</strong> — predicted by <em>Chen &amp; Li (2022)</em> (5.2–5.3, 7.0–7.1, 8.3–8.8, 9.2–9.7, 10.6–10.9, 12.8–13.4, 16.7–17.2&nbsp;µm).</li>
+    <li><strong>PAHs</strong> — e.g., 3.3, 6.2, 7.7, 8.6, 11.2–11.3, 12.7&nbsp;µm.</li>
+    <li><strong>Ices</strong> — H<sub>2</sub>O, CO, CO<sub>2</sub>, CH<sub>4</sub>, NH<sub>3</sub>, CH<sub>3</sub>OH, incl. 15.2&nbsp;µm CO<sub>2</sub> ice.</li>
+    <li><strong>Silicates</strong> — broad 9.7–11&nbsp;µm absorption region.</li>
+    <li><strong>Atomic &amp; molecular lines</strong> — e.g., [Ne&nbsp;II] 12.81, H<sub>2</sub> S(1) 17.03, [S&nbsp;IV] 10.5&nbsp;µm.</li>
+    <li><strong>Other carbonaceous species</strong> — fullerenes (C<sub>60</sub>, C<sub>60</sub><sup>+</sup>), graphene C<sub>24</sub>, nanodiamonds.</li>
+  </ul>
+<h3>📊 Table A — Dust, Molecules, Nanostructures (CNT, PAH, Fullerenes, Ices, etc.)</h3>
+
+<table>
+  <thead>
+    <tr><th>Paper (year, authors)</th><th>Species / Feature</th><th>Band (µm / Å / GHz / THz)</th><th>Type</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Megías et al. (2025)</b></td><td>H<sub>2</sub>O ice</td><td>≈3, ≈6 µm</td><td>Absorption</td><td>Stretch &amp; bending</td></tr>
+    <tr><td></td><td>CO<sub>2</sub> ice</td><td>4.27, 15.2 µm</td><td>Absorption</td><td></td></tr>
+    <tr><td></td><td>CO ice</td><td>4.67 µm</td><td>Absorption</td><td></td></tr>
+    <tr><td></td><td>CH<sub>4</sub> ice</td><td>7.7 µm</td><td>Absorption</td><td></td></tr>
+    <tr><td></td><td>NH<sub>3</sub> ice</td><td>2.96 µm</td><td>Absorption</td><td></td></tr>
+    <tr><td></td><td>CH<sub>3</sub>OH ice</td><td>3.53, 9.7 µm</td><td>Absorption</td><td></td></tr>
+
+    <tr><td><b>Yoon et al. (2025)</b> – PRIMA/FIRESS PAH</td><td>PAH (qPAH models)</td><td>3.3, 6.2, 7.7, 11.2 µm</td><td>Emission</td><td>qPAH = 0.5%, 1.8%, 3.8%</td></tr>
+
+    <tr><td><b>Chen &amp; Li (2022)</b> – CNTs in Space</td><td>CNT neutral (NT)</td><td>5.3, 7.0, 8.8, 9.7, 10.9, 14.2, 16.8 µm</td><td>Absorption</td><td>Predicted IR bands</td></tr>
+    <tr><td></td><td>CNT<sup>+</sup> (NT<sup>+</sup>)</td><td>5.2, 7.1, 8.3, 9.2, 13.4, 16.7 µm</td><td>Absorption</td><td></td></tr>
+    <tr><td></td><td>HNT</td><td>3.3, 6.5, 8.2, 10.8, 13.0, 17.2 µm</td><td>Absorption</td><td>Hydrogenated CNTs</td></tr>
+    <tr><td></td><td>HNT<sup>+</sup></td><td>3.3, 6.6, 8.3, 10.6, 12.8, 17.2 µm</td><td>Absorption</td><td>Hydrogenated cationic CNTs</td></tr>
+    <tr><td></td><td>C<sub>60</sub></td><td>7.0, 8.45, 17.3, 18.9 µm</td><td>Emission</td><td>Fullerene</td></tr>
+    <tr><td></td><td>C<sub>60</sub><sup>+</sup></td><td>6.4, 7.1, 8.2, 10.5 µm</td><td>Emission</td><td>Fullerene cation</td></tr>
+    <tr><td></td><td>Graphene C<sub>24</sub></td><td>6.6, 9.8, 20 µm</td><td>Absorption</td><td>Graphene sheet</td></tr>
+    <tr><td></td><td>PAH (classic)</td><td>3.3, 6.2, 7.7, 8.6, 11.3, 12.7 µm</td><td>Emission</td><td>Aromatic bands</td></tr>
+
+    <tr><td><b>Shuba et al. (2008)</b> – CNT absorption</td><td>Metallic CNT (zigzag (9,0))</td><td>12.7 µm</td><td>Absorption</td><td>Geometric resonance</td></tr>
+    <tr><td></td><td>Metallic CNT</td><td>4.9 µm</td><td>Absorption</td><td></td></tr>
+    <tr><td></td><td>Metallic CNT</td><td>3.2 µm</td><td>Absorption</td><td>Antenna-like</td></tr>
+
+    <tr><td><b>Rai &amp; Rastogi (2009)</b> – Nanodiamonds</td><td>Nanodiamond H–C stretch</td><td>3.43, 3.53 µm</td><td>Emission</td><td>Hydrogenated</td></tr>
+    <tr><td></td><td>Nanodiamond</td><td>3.47 µm</td><td>Absorption</td><td>Tertiary C–H</td></tr>
+    <tr><td></td><td>Nanodiamond/graphite</td><td>2175 Å (0.2175 µm)</td><td>Absorption</td><td>UV bump</td></tr>
+
+    <tr><td><b>Gavdush et al. (2025)</b> – Ice Analogues III</td><td>CO ice</td><td>≈1.5 THz (200 µm)</td><td>Absorption</td><td>Vibrational</td></tr>
+    <tr><td></td><td>CO<sub>2</sub> ice</td><td>≈3.5 THz (85 µm)</td><td>Absorption</td><td>Vibrational</td></tr>
+    <tr><td></td><td>CO<sub>2</sub> ice</td><td>15–18 THz (~20 µm)</td><td>Absorption</td><td>Sidebands, porosity</td></tr>
+  </tbody>
+</table>
+
+<h3 style="margin-top:2em">📊 Table B — Atomic and Ionic Lines (JWST/MIRI, PRIMA/FIRESS, etc.)</h3>
+
+<table>
+  <thead>
+    <tr><th>Paper (year, authors)</th><th>Species / Feature</th><th>Band (µm)</th><th>Type</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Kastner et al. (2025)</b> – JWST/NIRCam</td><td>[Fe II]</td><td>1.64 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>H<sub>2</sub></td><td>2.12 µm</td><td>Emission</td><td>Molecular</td></tr>
+    <tr><td></td><td>H I (Brα)</td><td>4.05 µm</td><td>Emission</td><td>Hydrogen</td></tr>
+
+    <tr><td><b>Fernández-Ontiveros et al. (2025)</b> – PRIMA/FIRESS</td><td>[S IV]</td><td>10.5 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[Ne III]</td><td>15.6 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[O IV]</td><td>25.9 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[O III]</td><td>52, 88 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[N III]</td><td>57 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[N II]</td><td>122, 205 µm</td><td>Emission</td><td>Ionized</td></tr>
+
+    <tr><td><b>Hermosa Muñoz et al. (2025)</b> – JWST/MIRI (GATOS)</td><td>H<sub>2</sub> 0–0 S(2)</td><td>12.28 µm</td><td>Emission</td><td>Molecular</td></tr>
+    <tr><td></td><td>H I (7–6)</td><td>12.37 µm</td><td>Emission</td><td>Hydrogen</td></tr>
+    <tr><td></td><td>[Ne II]</td><td>12.81 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[Ar V]</td><td>13.10 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[Mg V]</td><td>13.52 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[Ne V]</td><td>14.32 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[Cl II]</td><td>14.37 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>[Ne III]</td><td>15.56 µm</td><td>Emission</td><td>Ionized</td></tr>
+    <tr><td></td><td>H<sub>2</sub> 0–0 S(1)</td><td>17.03 µm</td><td>Emission</td><td>Molecular</td></tr>
+    <tr><td></td><td>[Ar VI]</td><td>11.6–11.76 µm</td><td>Emission</td><td>High excitation</td></tr>
+
+    <tr><td><b>Setton et al. (2025)</b> – ALMA SQuIGGŁE</td><td>CO(2–1)</td><td>230.538 GHz (~1.30 mm)</td><td>Emission</td><td>Molecular (ALMA)</td></tr>
+  </tbody>
+</table>
+
+  <details>
+    <summary>Short reference list</summary>
+    <ul>
+      <li>Qi Li, Aigen Li, B.W. Jiang, Tao Chen (2020). <em>On Carbon Nanotubes in the Interstellar Medium</em> — <a href="https://arxiv.org/abs/2002.05588" target="_blank" rel="noopener">arXiv:2002.05588</a></li>
+      <li>Tao Chen, Aigen Li (2019). <em>Synthesizing carbon nanotubes in space</em> — <a href="https://arxiv.org/abs/1909.09182" target="_blank" rel="noopener">arXiv:1909.09182</a></li>
+      <li>Plus PAH, ice, and line atlases as used in your mask files.</li>
+    </ul>
+    <p>Carbonette’s mask files are curated from these sources and kept conservative (anchors stay clear of mask edges).</p>
+  </details>
+
+  <h3>In one line</h3>
+  <p><strong>Carbonette turns cosmic light into a digital lab — scanning for CNT/HNT fingerprints, with physics-aware
+    statistics and transparent checks.</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== backend API ===== */
+const API = "http://127.0.0.1:8001";
+
+/* tab handling */
+const tbuttons = document.querySelectorAll('.tab');
+const panelAnalyze = document.getElementById('panel-analyze');
+const panelHistory = document.getElementById('panel-history');
+const panelAbout   = document.getElementById('panel-about');
+
+function showTab(name){
+  const map = { analyze: panelAnalyze, history: panelHistory, about: panelAbout };
+  Object.entries(map).forEach(([k,el])=> el.classList.toggle('hidden', k!==name));
+  tbuttons.forEach(b=> b.classList.toggle('active', b.dataset.tab===name));
+  // if opening history, load content
+  if(name==='history'){ loadHistory(); }
+  // if opening about, ask MathJax to typeset (in case not auto)
+  if(name==='about' && window.MathJax && MathJax.typesetPromise){ MathJax.typesetPromise(); }
+}
+
+tbuttons.forEach(btn=>{
+  btn.addEventListener('click', ()=> showTab(btn.dataset.tab));
+});
+
+/* also wire top menu links */
+document.querySelectorAll('[data-tabbtn]').forEach(a=>{
+  a.addEventListener('click', (e)=>{ e.preventDefault(); showTab(a.dataset.tabbtn); });
+});
+
+/* Analyze */
+const f = document.getElementById('f');
+const go = document.getElementById('go');
+const hint = document.getElementById('hint');
+const out = document.getElementById('out');
+const obj = document.getElementById('obj');
+const rad = document.getElementById('rad');
+
+function clear(el){ el.innerHTML=""; }
+function section(parent, title){
+  const box=document.createElement('div'); box.className="card";
+  const h=document.createElement('h3'); h.style.margin="0 0 8px"; h.textContent=title;
+  box.appendChild(h); parent.appendChild(box); return box;
+}
+function basename(p){ return (p||"").split(/[\\/]/).pop(); }
+function ext(name){ const m = /\.[^.]+$/.exec(name||""); return m ? m[0].toLowerCase() : ""; }
+function bust(url){ const sep = url.includes("?") ? "&" : "?"; return url + sep + "v=" + Date.now(); }
+function pickPreferredPdf(names){
+  return names.find(n => /_plots\.pdf$/i.test(n) && !/_extra_/i.test(n))
+      || names.find(n => ext(n) === ".pdf" && !/_extra_/i.test(n))
+      || names.find(n => ext(n) === ".pdf");
+}
+
+/* render outputs (RUN_DIR) */
+function renderFilesRUN(parent, files){
+  if(!files || !files.length) return;
+  const names = Array.from(new Set(files.map(basename))).sort((a,b)=>a.localeCompare(b));
+
+  // File list
+  const s1 = section(parent, "Generated files");
+  const ul = document.createElement('ul'); ul.className="files";
+  names.forEach(name=>{
+    const li=document.createElement('li');
+    const a=document.createElement('a'); a.href=`${API}/download?file=${encodeURIComponent(name)}`; a.target="_blank"; a.textContent=name;
+    li.appendChild(a); ul.appendChild(li);
+  });
+  s1.appendChild(ul);
+
+  // PDF preview (single, preferred)
+  const preferred = pickPreferredPdf(names);
+  if(preferred){
+    const s2 = section(parent, "PDF preview");
+    const wrap = document.createElement('div'); wrap.className="thumb pdf-wrap";
+    const iframe = document.createElement('iframe');
+    iframe.src = bust(`${API}/download?file=${encodeURIComponent(preferred)}#toolbar=1&zoom=page-width`);
+    iframe.title = preferred;
+    wrap.appendChild(iframe);
+    s2.appendChild(wrap);
+  }
+
+  // PNG grid (all)
+  const pngs = names.filter(n => ext(n)===".png");
+  if(pngs.length){
+    const s3 = section(parent, "PNG previews");
+    const grid=document.createElement('div'); grid.className="grid";
+    pngs.forEach(n=>{
+      const card=document.createElement('div'); card.className="thumb";
+      const img=document.createElement('img'); img.loading="lazy";
+      img.src=bust(`${API}/download?file=${encodeURIComponent(n)}`);
+      card.appendChild(img); grid.appendChild(card);
+    });
+    s3.appendChild(grid);
+  }
+}
+
+/* Top-level status/summary + per-candidate blocks */
+f.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  go.disabled = true;
+  hint.innerHTML = `Running… <span class="spinner"></span>`;
+  clear(out);
+  try{
+    const res = await fetch(`${API}/run`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        object: obj.value.trim(),
+        radius_arcsec: Number(rad.value) || 20,
+        options: { clean: true }
+      })
+    });
+    const json = await res.json();
+
+    // Header summary
+    const head = section(out, "Run summary");
+    const rr = json && json.result ? json.result : {};
+    const meta = rr.meta || {};
+    const top = document.createElement('div');
+    top.innerHTML = `Status: <b>${rr.status || '?'}</b> • mode: ${rr.mode || 'single'} • candidates: ${rr.count ?? '?'} • elapsed ${meta.elapsed_s ?? '?'} s`;
+    head.appendChild(top);
+    if(Array.isArray(rr.warnings) && rr.warnings.length){
+      const ul=document.createElement('ul'); ul.className='warn';
+      rr.warnings.forEach(w=>{const li=document.createElement('li'); li.textContent=w; ul.appendChild(li);});
+      head.appendChild(ul);
+    }
+    const sys = document.createElement('div'); sys.className='muted';
+    sys.textContent = `Carbonette v${meta.version || '?'} • git ${meta.git || '?'} • Python ${meta.python || '?'} • ${meta.os || ''}`;
+    head.appendChild(sys);
+
+    // Per-candidate rendering
+    const results = Array.isArray(rr.results) ? rr.results : (rr.result ? [rr] : []);
+    if(!results.length){
+      const p=document.createElement('p'); p.className='muted'; p.textContent='No candidate inputs were processed (no input_*.tbl).';
+      out.appendChild(p);
+    }else{
+      results.forEach((item, idx)=>{
+        const block = section(out, `Candidate ${idx+1} — ${item.input_file || 'input_???'}`);
+
+        // status + provenance/log
+        const r = (item && item.result) ? item.result : {};
+        const st = document.createElement('div');
+        st.innerHTML = `Status: <b>${r.status || '?'}</b>`;
+        block.appendChild(st);
+
+        if (typeof r.stdout === 'string' && r.stdout){
+          const det = document.createElement('details'); det.open = false;
+          const sum = document.createElement('summary'); sum.textContent = 'Provenance & log'; sum.className="muted";
+          const pre = document.createElement('pre'); pre.textContent = r.stdout;
+          det.appendChild(sum); det.appendChild(pre); block.appendChild(det);
+        }
+
+        if (Array.isArray(r.warnings) && r.warnings.length){
+          const ul=document.createElement('ul'); ul.className='warn';
+          r.warnings.forEach(w=>{const li=document.createElement('li'); li.textContent=w; ul.appendChild(li);});
+          block.appendChild(ul);
+        }
+
+        // files preview (RUN_DIR)
+        renderFilesRUN(block, r.files || []);
+      });
+    }
+  }catch(err){
+    const s = section(out, "Error");
+    const d = document.createElement('div'); d.className="err"; d.textContent=String(err);
+    s.appendChild(d);
+  }finally{
+    go.disabled = false; hint.textContent = '';
+  }
+});
+
+/* ================= HISTORY ================= */
+
+async function api(path){ const r = await fetch(`${API}${path}`); return r.json(); }
+
+const histObjects = document.getElementById('history-objects');
+const histRuns = document.getElementById('history-object-runs');
+const histView = document.getElementById('history-run-view');
+
+function linkArchive(path){
+  return `${API}/download_archive?path=${encodeURIComponent(path)}`;
+}
+
+function renderHistoryObjects(data){
+  clear(histObjects); clear(histRuns); clear(histView);
+  const objs = data.objects || [];
+  if(!objs.length){
+    const p=document.createElement('p'); p.className='muted'; p.textContent='No archived runs yet.';
+    histObjects.appendChild(p); return;
+  }
+  objs.forEach(o=>{
+    const row=document.createElement('div'); row.className='runcard';
+    const a=document.createElement('a'); a.href='#'; a.textContent=`${o.label}  (${o.count})`;
+    a.addEventListener('click', async (ev)=>{
+      ev.preventDefault();
+      const ob = await api(`/history/${o.slug}`);
+      renderHistoryRuns(o.slug, ob);
+    });
+    row.appendChild(a);
+    histObjects.appendChild(row);
+  });
+}
+
+function renderHistoryRuns(slug, objData){
+  clear(histRuns); clear(histView);
+  const runs = objData.runs || [];
+  if(!runs.length){
+    const p=document.createElement('p'); p.className='muted'; p.textContent='No runs for this object.';
+    histRuns.appendChild(p); return;
+  }
+  const title=document.createElement('h4'); title.textContent=`${objData.label} — ${runs.length} run(s)`; title.style.marginBottom='6px';
+  histRuns.appendChild(title);
+
+  runs.forEach(r=>{
+    const row=document.createElement('div'); row.className='runcard';
+    const a=document.createElement('a'); a.href='#'; a.textContent=`Run ${r.timestamp}`;
+    a.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      renderHistoryRunView(slug, r);
+    });
+    row.appendChild(a);
+    histRuns.appendChild(row);
+  });
+}
+
+function renderHistoryRunView(slug, r){
+  clear(histView);
+  const s = section(histView, `Run ${r.timestamp}`);
+  const files = Array.from(new Set((r.files || []).map(x=>x))).sort((a,b)=>a.localeCompare(b));
+
+  // file list
+  const ul=document.createElement('ul'); ul.className='files';
+  files.forEach(name=>{
+    const li=document.createElement('li');
+    const a=document.createElement('a'); a.href=linkArchive(`${slug}/${r.timestamp}/${name}`); a.target='_blank'; a.textContent=name;
+    li.appendChild(a); ul.appendChild(li);
+  });
+  s.appendChild(ul);
+
+  // PDF preview
+  const pdf = (()=> files.find(n=>/_plots\.pdf$/i.test(n) && !/_extra_/i.test(n))
+                     || files.find(n=>/\.pdf$/i.test(n) && !/_extra_/i.test(n))
+                     || files.find(n=>/\.pdf$/i.test(n)))();
+  if(pdf){
+    const card=document.createElement('div'); card.className='thumb pdf-wrap'; card.style.marginTop='10px';
+    const iframe=document.createElement('iframe');
+    iframe.src = linkArchive(`${slug}/${r.timestamp}/${pdf}`) + '#toolbar=1&zoom=page-width';
+    card.appendChild(iframe); s.appendChild(card);
+  }
+
+  // PNG grid
+  const pngs = files.filter(n=>/\.png$/i.test(n));
+  if(pngs.length){
+    const grid=document.createElement('div'); grid.className='grid'; grid.style.marginTop='10px';
+    pngs.forEach(n=>{
+      const card=document.createElement('div'); card.className='thumb';
+      const img=document.createElement('img'); img.loading='lazy';
+      img.src = linkArchive(`${slug}/${r.timestamp}/${n}`);
+      card.appendChild(img); grid.appendChild(card);
+    });
+    s.appendChild(grid);
+  }
+}
+
+async function loadHistory(){
+  try{
+    const data = await api('/history');
+    renderHistoryObjects(data);
+  }catch(e){
+    clear(histObjects);
+    const p=document.createElement('p'); p.className='err'; p.textContent=String(e);
+    histObjects.appendChild(p);
+  }
+}
+
+/* ===== Slider altezza PDF ===== */
+const pdfH = document.getElementById('pdfH');
+const pdfHval = document.getElementById('pdfHval');
+if (pdfH) {
+  const apply = v => { document.documentElement.style.setProperty('--pdfH', v+'vh'); if(pdfHval) pdfHval.textContent = v+'vh'; };
+  pdfH.addEventListener('input', e => apply(e.target.value));
+  apply(pdfH.value);
+}
+</script>
+</body>
+</html>
