@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Carbonette — About</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- MathJax (for any inline formulas on this page) -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{
+      color-scheme: dark;
+      --ink:#0b0e14; --fg:#e7eeff; --muted:#b7beca;
+      --card:#161922C7; --line:#2b313d; --focus:#6d7cff;
+      --glx1: rgba(109,124,255,.55); --glx2: rgba(10,179,255,.45);
+      --glring: 0 0 20px var(--glx1), 0 0 45px var(--glx2), inset 0 0 12px rgba(255,255,255,.15);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--ink) url("./bg.jpg") center/cover fixed no-repeat;
+      color:var(--fg); font-family:system-ui, Arial, sans-serif;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+    .brand{font-family:"Courier New",monospace;letter-spacing:.5em;transform:scaleY(.6);
+      font-weight:680;font-size:clamp(40px,5vw,72px);text-transform:uppercase;
+      color:transparent;background:linear-gradient(180deg,#f6f8ff,#9bb8ff);
+      -webkit-background-clip:text;background-clip:text; text-shadow:0 0 30px rgba(10,179,255,.35);}
+    .nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    a.btn{display:inline-block;padding:8px 12px;border-radius:10px;border:1px solid #2a3140;
+      background:linear-gradient(180deg,#1a2033,#10172a);color:#cfe1ff;text-decoration:none;box-shadow:var(--glring)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--glring);margin:16px 0}
+    h1{font-size:1.9rem;margin:.2em 0 .3em} h2{font-size:1.4rem;margin:1em 0 .4em}
+    h3{font-size:1.15rem;margin:1em 0 .4em}
+    p{color:#d5def3;margin:.5em 0}
+    table{border-collapse:collapse;width:100%;font-size:.95rem;margin-top:8px}
+    th,td{border:1px solid #2b313d;padding:8px 10px;text-align:left}
+    th{background:#121b2d}
+    .pill{display:inline-block;background:#0b1b3a;color:#9ec7ff;padding:.2em .55em;border-radius:999px;font-size:.85rem;border:1px solid #1f3a6b}
+    .muted{color:#aab2bf}
+    .legend-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+    .legend pre{
+      white-space:pre-wrap;overflow-wrap:anywhere;
+      background:#0e1320;border:1px dashed #32415e;color:#e8eeff;padding:12px;border-radius:12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      line-height:1.25;font-size:13px;
+    }
+    button.small{padding:8px 11px;border-radius:10px;border:1px solid #2a3140;
+      background:linear-gradient(180deg,#22283a,#171c2b);color:#dbe6ff;cursor:pointer;box-shadow:var(--glring)}
+    button.small:hover{filter:brightness(1.08)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">CARBONETTE</div>
+      <div>
+        <!-- LINK RELATIVO: funziona con http://127.0.0.1:8001/app/about.html e con file:// -->
+        <a class="btn" href="fronted_index.html">← Back to Analyzer</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h1>About Carbonette</h1>
+      <p><span class="pill">Purpose</span> Carbonette scans infrared spectra and highlights where <em>carbon nanotube</em> (CNT)
+        and <em>hydrogenated nanotube</em> (HNT) bands might be hiding. It’s a careful filter: it doesn’t declare discoveries,
+        it shows where the data deserve a closer look.
+        This analysis engine is based on publicly available Spitzer spectra (IRSA Enhanced Products) and tests the infrared bands predicted for carbon nanotubes by Chen &amp; Li (2019, 2020).
+        The authors of those studies are not affiliated with or responsible for this project.</p>
+    </div>
+
+    <!-- ===== Legend / Interpretation ===== -->
+    <div class="card legend">
+      <h2>Legend / Interpretation Guide</h2>
+      <div class="legend-tools">
+        <button id="copyLegend" class="small">Copy</button>
+        <button id="downloadLegend" class="small">Download .txt</button>
+      </div>
+      <pre id="legendText">CNT/HNT PIPELINE — INTERPRETATION GUIDE
+=======================================
+CNT/HNT pipeline v1.0.0
+Author: M. Vengher
+Purpose: Automated spectral analysis for CNT/HNT feature detection (5–20 µm)
+Methods: quick-look, SAFE masks, LSF injection-recovery, core–wide coherence,
+template matching (Chen & Li 2019/2020), slope & shape coherence tests.
+
+Tests made to build this pipeline: All objects analyzed with this pipeline are
+drawn from the IRSA Spitzer Enhanced Products archive.
+
+This section provides a quick legend explaining the meaning of each diagnostic
+table and metric in the CNT/HNT pipeline. It is intended for reviewers,
+students, or collaborators to interpret results correctly and responsibly.
+
+------------------------------------------------------------
+1. Quick-look table
+------------------------------------------------------------
+• S/N (signal-to-noise)  — Integrated significance of the deficit (negative) or
+  emission (positive) within the defined band.
+• √Δχ² (zsig)  — Equivalent Gaussian significance derived from Δχ².
+• EW (equivalent width)  — Band strength in μm. Negative = absorption, positive = emission.
+• τ̄ (mean optical depth) — Average optical depth over the band.
+• verdict  — "YES" indicates a statistically significant feature; "NO" = none.
+
+Interpretation:
+    YES (detection) → statistically significant spectral feature.
+    YES (robust)    → confirmed by multiple independent checks.
+    NO              → no significant feature.
+    MARGINAL        → weak, possibly real but below threshold.
+
+------------------------------------------------------------
+2. SAFE / water-safe / PAH-safe comparison
+------------------------------------------------------------
+Tests whether the same feature persists when nearby PAH or water bands are
+masked.  "YES (robust)" means the signal survives all safety masks.
+
+------------------------------------------------------------
+3. Core vs Wide cross-confirmation
+------------------------------------------------------------
+Each band is measured in two versions (core and wide) to check consistency.
+Verdict:
+    IT FITS    → same sign and amplitude trend (consistent matching).
+    MARGINAL   → slightly inconsistent.
+    NO         → opposite sign or incoherent shape.
+
+------------------------------------------------------------
+4. LSF and Injection–Recovery tests
+------------------------------------------------------------
+• width/LSF ≥ 1 → the band is resolved relative to the instrument line spread.
+• rec_rate ≥ 0.8 → artificial injections of similar depth are recovered ≥80% of times.
+These verify that the signal is neither noise nor instrumental.
+
+------------------------------------------------------------
+5. Extra Verification
+------------------------------------------------------------
+Additional robustness tests:
+    – Rebin(1,2): stability across spectral resolutions.
+    – Edge ±0.05: shift of integration limits.
+    – Jackknife: stability when excluding subsets of points.
+    – Poly2 vs Linear: stability against continuum model choice.
+All must pass (OK) for a "CONFIRM_STRONG" classification.
+
+------------------------------------------------------------
+6. Template Matching (Chen & Li)
+------------------------------------------------------------
+Observed residuals are compared with synthetic CNT/HNT spectra predictions from
+Tao Chen & Aigen Li (2019, "Synthesizing carbon nanotubes in space").
+• z (√Δχ²) > 5 → strong morphological match.
+• best_template → which CNT/HNT family fits best (neutral, cation, HNT...).
+• alpha → scaling factor; positive = absorption, negative = emission.
+
+------------------------------------------------------------
+7. Slope Check (polarization/slope test)
+------------------------------------------------------------
+Left vs right continuum slopes (±0.5 μm from band center) are compared.
+    CHECK → slope changes significantly (real continuum distortion).
+    OK    → consistent with noise.
+
+------------------------------------------------------------
+8. Shape Coherence (spectral correlation)
+------------------------------------------------------------
+Normalized correlation r between bands (10.7–12.9–17 µm):
+    r ≈ +1 → similar profile shape (same carrier species).
+    r ≈ −1 → mirrored/opposite shape (e.g., emission vs absorption).
+    |r| < 0.5 → unrelated.
+p-value near zero → correlation statistically significant.
+
+AND MUCH MORE - You can find everything in the reports, pdf,csv,png ecc.
+------------------------------------------------------------
+9. Interpretation and Caution
+------------------------------------------------------------
+These diagnostics indicate consistency with CNT/HNT-like features,
+not direct proof of carbon nanotubes or nanostructures.
+Treat outputs as candidates pending verification via
+  – higher-resolution spectroscopy (e.g., JWST/MIRI),
+  – polarization or imaging,
+  – laboratory spectra comparison.
+No discovery claims are made; results guide further study.</pre>
+    </div>
+
+    <!-- ===== Tables A & B ===== -->
+    <div class="card">
+      <h2>📊 Table A — Dust, Molecules, Nanostructures (CNT, PAH, Fullerenes, Ices, etc.)</h2>
+      <table>
+        <thead>
+          <tr><th>Paper (year, authors)</th><th>Species / Feature</th><th>Band (µm / Å / GHz / THz)</th><th>Type</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Megías et al. (2025)</b></td><td>H<sub>2</sub>O ice</td><td>≈3, ≈6 µm</td><td>Absorption</td><td>Stretch &amp; bending</td></tr>
+          <tr><td></td><td>CO<sub>2</sub> ice</td><td>4.27, 15.2 µm</td><td>Absorption</td><td></td></tr>
+          <tr><td></td><td>CO ice</td><td>4.67 µm</td><td>Absorption</td><td></td></tr>
+          <tr><td></td><td>CH<sub>4</sub> ice</td><td>7.7 µm</td><td>Absorption</td><td></td></tr>
+          <tr><td></td><td>NH<sub>3</sub> ice</td><td>2.96 µm</td><td>Absorption</td><td></td></tr>
+          <tr><td></td><td>CH<sub>3</sub>OH ice</td><td>3.53, 9.7 µm</td><td>Absorption</td><td></td></tr>
+
+          <tr><td><b>Yoon et al. (2025)</b> – PRIMA/FIRESS PAH</td><td>PAH (qPAH models)</td><td>3.3, 6.2, 7.7, 11.2 µm</td><td>Emission</td><td>qPAH = 0.5%, 1.8%, 3.8%</td></tr>
+
+          <tr><td><b>Chen &amp; Li (2020)</b> – CNTs in Space</td><td>CNT neutral (NT)</td><td>5.3, 7.0, 8.8, 9.7, 10.9, 14.2, 16.8 µm</td><td>Absorption</td><td>Predicted IR bands</td></tr>
+          <tr><td></td><td>CNT<sup>+</sup> (NT<sup>+</sup>)</td><td>5.2, 7.1, 8.3, 9.2, 13.4, 16.7 µm</td><td>Absorption</td><td></td></tr>
+          <tr><td></td><td>HNT</td><td>3.3, 6.5, 8.2, 10.8, 13.0, 17.2 µm</td><td>Absorption</td><td>Hydrogenated CNTs</td></tr>
+          <tr><td></td><td>HNT<sup>+</sup></td><td>3.3, 6.6, 8.3, 10.6, 12.8, 17.2 µm</td><td>Absorption</td><td>Hydrogenated cationic CNTs</td></tr>
+          <tr><td></td><td>C<sub>60</sub></td><td>7.0, 8.45, 17.3, 18.9 µm</td><td>Emission</td><td>Fullerene</td></tr>
+          <tr><td></td><td>C<sub>60</sub><sup>+</sup></td><td>6.4, 7.1, 8.2, 10.5 µm</td><td>Emission</td><td>Fullerene cation</td></tr>
+          <tr><td></td><td>Graphene C<sub>24</sub></td><td>6.6, 9.8, 20 µm</td><td>Absorption</td><td>Graphene sheet</td></tr>
+          <tr><td></td><td>PAH (classic)</td><td>3.3, 6.2, 7.7, 8.6, 11.3, 12.7 µm</td><td>Emission</td><td>Aromatic bands</td></tr>
+
+          <tr><td><b>Shuba et al. (2008)</b> – CNT absorption</td><td>Metallic CNT (zigzag (9,0))</td><td>12.7 µm</td><td>Absorption</td><td>Geometric resonance</td></tr>
+          <tr><td></td><td>Metallic CNT</td><td>4.9 µm</td><td>Absorption</td><td></td></tr>
+          <tr><td></td><td>Metallic CNT</td><td>3.2 µm</td><td>Absorption</td><td>Antenna-like</td></tr>
+
+          <tr><td><b>Rai &amp; Rastogi (2009)</b> – Nanodiamonds</td><td>Nanodiamond H–C stretch</td><td>3.43, 3.53 µm</td><td>Emission</td><td>Hydrogenated</td></tr>
+          <tr><td></td><td>Nanodiamond</td><td>3.47 µm</td><td>Absorption</td><td>Tertiary C–H</td></tr>
+          <tr><td></td><td>Nanodiamond/graphite</td><td>2175 Å (0.2175 µm)</td><td>Absorption</td><td>UV bump</td></tr>
+
+          <tr><td><b>Gavdush et al. (2025)</b> – Ice Analogues III</td><td>CO ice</td><td>≈1.5 THz (200 µm)</td><td>Absorption</td><td>Vibrational</td></tr>
+          <tr><td></td><td>CO<sub>2</sub> ice</td><td>≈3.5 THz (85 µm)</td><td>Absorption</td><td>Vibrational</td></tr>
+          <tr><td></td><td>CO<sub>2</sub> ice</td><td>15–18 THz (~20 µm)</td><td>Absorption</td><td>Sidebands, porosity</td></tr>
+        </tbody>
+      </table>
+
+      <h2 style="margin-top:24px">📊 Table B — Atomic and Ionic Lines (JWST/MIRI, PRIMA/FIRESS, etc.)</h2>
+      <table>
+        <thead>
+          <tr><th>Paper (year, authors)</th><th>Species / Feature</th><th>Band (µm)</th><th>Type</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Kastner et al. (2025)</b> – JWST/NIRCam</td><td>[Fe II]</td><td>1.64 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>H<sub>2</sub></td><td>2.12 µm</td><td>Emission</td><td>Molecular</td></tr>
+          <tr><td></td><td>H I (Brα)</td><td>4.05 µm</td><td>Emission</td><td>Hydrogen</td></tr>
+
+          <tr><td><b>Fernández-Ontiveros et al. (2025)</b> – PRIMA/FIRESS</td><td>[S IV]</td><td>10.5 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[Ne III]</td><td>15.6 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[O IV]</td><td>25.9 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[O III]</td><td>52, 88 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[N III]</td><td>57 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[N II]</td><td>122, 205 µm</td><td>Emission</td><td>Ionized</td></tr>
+
+          <tr><td><b>Hermosa Muñoz et al. (2025)</b> – JWST/MIRI (GATOS)</td><td>H<sub>2</sub> 0–0 S(2)</td><td>12.28 µm</td><td>Emission</td><td>Molecular</td></tr>
+          <tr><td></td><td>H I (7–6)</td><td>12.37 µm</td><td>Emission</td><td>Hydrogen</td></tr>
+          <tr><td></td><td>[Ne II]</td><td>12.81 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[Ar V]</td><td>13.10 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[Mg V]</td><td>13.52 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[Ne V]</td><td>14.32 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[Cl II]</td><td>14.37 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>[Ne III]</td><td>15.56 µm</td><td>Emission</td><td>Ionized</td></tr>
+          <tr><td></td><td>H<sub>2</sub> 0–0 S(1)</td><td>17.03 µm</td><td>Emission</td><td>Molecular</td></tr>
+          <tr><td></td><td>[Ar VI]</td><td>11.6–11.76 µm</td><td>Emission</td><td>High excitation</td></tr>
+
+          <tr><td><b>Setton et al. (2025)</b> – ALMA SQuIGGŁE</td><td>CO(2–1)</td><td>230.538 GHz (~1.30 mm)</td><td>Emission</td><td>Molecular (ALMA)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <p class="muted">This page is explanatory; it does not claim detections. Use it as an interpretation key for Carbonette outputs.</p>
+    </div>
+  </div>
+
+  <script>
+    // Copy & Download handlers for the legend
+    const txt = document.getElementById('legendText').innerText;
+    document.getElementById('copyLegend').addEventListener('click', async ()=> {
+      try { await navigator.clipboard.writeText(txt); alert('Legend copied to clipboard'); } catch(e){ alert('Copy failed'); }
+    });
+    document.getElementById('downloadLegend').addEventListener('click', ()=> {
+      const blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'Carbonette_Legend.txt'; a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
