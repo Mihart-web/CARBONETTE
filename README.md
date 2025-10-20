@@ -5,6 +5,10 @@
 ![Engine](https://img.shields.io/badge/engine-Carbonette-blueviolet)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Colab%20%7C%20Linux-lightgrey)
 
+<p align="center">
+  <img src="fronted/carbonette_site.jpg" alt="Carbonette Website Preview" width="800">
+</p>
+
 # CARBONETTE CNT/HNT pipeline v1.0.0
 Author: M. Vengher
 Purpose: Automated spectral analysis for CNT/HNT feature detection (5–20 µm)
@@ -16,6 +20,10 @@ Carbonette scans infrared spectra and highlights where carbon nanotube (CNT) and
 
 ## 🎯 Overview
 CARBONETTE is a sophisticated automated pipeline for detecting Carbon NanoTube (CNT) and Hydrogenated NanoTube (HNT) absorption features in infrared astronomical spectra. The system processes data directly from NASA's IRSA Enhanced Products Catalog and implements a rigorous multi-validation framework to ensure scientifically robust detections.
+
+<p align="center">
+  <img src="fronted/carbonette_site2.jpg" alt="Carbonette Website Preview" width="800">
+</p>
 
 ## ✨ Comprehensive Validation Framework
 
@@ -116,6 +124,9 @@ A **"YES (robust)"** detection requires:
 ✅ Template matching consistency
 ✅ FDR-corrected significance
 ```
+<p align="center">
+  <img src="fronted/carbonette_site3.jpg" alt="Carbonette Website Preview" width="800">
+</p>
 
 ## 📚 **Scientific Foundation**
 
