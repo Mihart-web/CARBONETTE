@@ -1,3 +1,10 @@
+[![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)](https://www.python.org/)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Status](https://img.shields.io/badge/status-stable-brightgreen)
+![Backend](https://img.shields.io/badge/backend-FastAPI-orange)
+![Engine](https://img.shields.io/badge/engine-Carbonette-blueviolet)
+
+
 # CARBONETTE CNT/HNT pipeline v1.0.0
 Author: M. Vengher
 Purpose: Automated spectral analysis for CNT/HNT feature detection (5–20 µm)
