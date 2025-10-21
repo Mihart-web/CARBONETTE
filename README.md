@@ -174,6 +174,30 @@ In the other, same as above but as well load port 8001.
 
 Control tha API and if is online, open the interface by clikking on the fronted_index. html to open the site. 
 
+Anaconda Prompt (Miniconda3) in my case
+
+    conda activate carbonette         <------- put this command in your Python prompt
+                                         after you installed all requirements
+                                         pip install -r requirements.txt installs all programs in there
+                                         my project is called "carbonette" — you can call it "happypie"
+                                         in that case, the command in your prompt will be:
+                                         conda activate happypie
+                                
+    cd %USERPROFILE%\Desktop\carbonette <------- change the name of the project folder
+                                               with the name you gave it
+                                               and the location on your computer where you have it.
+                                               in this case, I have the project folder with the engine etc.
+                                               on my Desktop, and the folder is called "carbonette"
+
+uvicorn main:app --reload --port 8001  <------- this is the command you put in your Python prompt
+                                                to start the FastAPI server
+
+         http://127.0.0.1:8001/docs    <------- this is the site’s main page (paste it in the browser tab)
+
+           http://127.0.0.1:8001       <-------- If you are online, this should say:
+                                                     “Carbonette API is alive!”
+
+
 
 ## Citation
 If you use Carbonette in your research, please cite:
