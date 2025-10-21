@@ -166,6 +166,15 @@ The repository includes:
 
 (Note: the typo “fronted” is intentionally kept for internal compatibility with existing code paths.)
 
+How to use it: After saving the folders engine+fronted+run on your computer, install requirements.txt and open 2 python prompts. 
+In one : conda activate carbonette - and folder /user path where the project was saved. 
+In the other, same as above but as well load port 8001.
+
+( if the Spitzer Enhanced Products catalog button doesn't work, substitute the link in the fronted html by opening it in txt.)
+
+Control tha API and if is online, open the interface by clikking on the fronted_index. html to open the site. 
+
+
 ## Citation
 If you use Carbonette in your research, please cite:
 Vengher, M. (2025). Carbonette: Automated CNT/HNT Spectral Detection Pipeline. 
