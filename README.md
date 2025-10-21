@@ -158,7 +158,7 @@ The pipeline implements methodologies from established astronomical spectroscopy
 Tests made to build this pipeline: All objects analyzed with this pipeline are
 drawn from the IRSA Spitzer Enhanced Products archive.
 
-📁 Directory structure
+# 📁 **Directory structure**
 The repository includes:
 - `engine/` — the analytical core (CNT/HNT detection algorithms)
 - `run/` — runtime data and input tables
@@ -166,9 +166,23 @@ The repository includes:
 
 (Note: the typo “fronted” is intentionally kept for internal compatibility with existing code paths.)
 
-How to use it: After saving the folders engine+fronted+run on your computer, install requirements.txt and open 2 python prompts. 
-In one : conda activate carbonette - and folder /user path where the project was saved. 
-In the other, same as above but as well load port 8001.
+## 🚀 How to Run the Project
+
+1. Clone the repository  
+   `git clone https://github.com/Mihart-web/CARBONETTE.git`
+
+2. Create and activate a virtual environment  
+   `conda create -n carbonette python=3.11`  
+   `conda activate carbonette`
+
+3. Install dependencies  
+   `pip install -r requirements.txt`
+
+4. Run the API server  
+   `uvicorn main:app --reload --port 8001`
+
+5. Open the documentation  
+   Go to `http://127.0.0.1:8001/docs` in your browser
 
 ( if the Spitzer Enhanced Products catalog button doesn't work, substitute the link in the fronted html by opening it in txt.)
 
