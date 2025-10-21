@@ -151,3 +151,15 @@ The pipeline implements methodologies from established astronomical spectroscopy
 Tests made to build this pipeline: All objects analyzed with this pipeline are
 drawn from the IRSA Spitzer Enhanced Products archive.
 
+📁 Directory structure
+The repository includes:
+- `engine/` — the analytical core (CNT/HNT detection algorithms)
+- `run/` — runtime data and input tables
+- `fronted/` — user-facing interface (HTML pages and visual components)
+
+(Note: the typo “fronted” is intentionally kept for internal compatibility with existing code paths.)
+
+## Citation
+If you use Carbonette in your research, please cite:
+Vengher, M. (2025). Carbonette: Automated CNT/HNT Spectral Detection Pipeline. 
+
