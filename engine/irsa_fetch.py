@@ -167,7 +167,9 @@ def fetch_irsa_split_tbls_by_pos(ra_deg: float, dec_deg: float, size_arcmin: flo
         )
         print(f"[FETCHER] WROTE {out_clean.name}: rows={len(rows)} λ={wmin:.2f}–{wmax:.2f} µm  (src: {raw_path.name})")
         outputs.append(out_clean)
-
+    (RUN_DIR / "input_manifest.txt").write_text("\n".join(manifest_lines) + "\n", encoding="utf-8")
+    return outputs
+    
 def fetch_irsa_split_tbls_by_name(object_name: str, size_arcmin: float = 1.2) -> List[Path]:
     if not object_name or not str(object_name).strip():
         raise ValueError("object_name mancante o vuoto.")
