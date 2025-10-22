@@ -212,19 +212,17 @@ uvicorn main:app --reload --port 8001  <------- this is the command you put in y
                                                      “Carbonette API is alive!”
 
 # 📂 Google_Colab_Ready/
- ├── CARBONETTE_colab_code
- └── CARBONETTE_for_Google_Colab.docx
+ ├── Google Colab/ENGINE - Copy-Paste ready to use
+ └── Google Colab/CARBONETTE for Google Colab.pdf
 
 ## 🧪 Run in Google Colab
 
 Want to try Carbonette in your browser?  
-➡️ Open the **[Google_Colab_Ready](https://github.com/Mihart-v/CARBONETTE/tree/main/Google_Colab_Ready)** folder.
-
-Inside:
-- CARBONETTE_colab_code. — one-cell script ready to copy into a Colab notebook.  
-- CARBONETTE_for_Google_Colab.docx — short tutorial explaining how to insert your IRSA data and hit “Run”.
+https://github.com/Mihart-web/CARBONETTE/blob/main/Google%20Colab/ENGINE%20-%20Copy-Paste%20ready%20to%20use
 
 No installation required.
+
+Hit Run. Or watch pdf to insert your IRSA datam
 ## Citation
 If you use Carbonette in your research, please cite:
 Vengher, M. (2025). Carbonette: Automated CNT/HNT Spectral Detection Pipeline. 
