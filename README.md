@@ -211,7 +211,8 @@ uvicorn main:app --reload --port 8001  <------- this is the command you put in y
            http://127.0.0.1:8001       <-------- If you are online, this should say:
                                                      “Carbonette API is alive!”
 
-# 📂 Google_Colab_Ready/
+
+# Google Colab_Ready
  ├── Google Colab/ENGINE - Copy-Paste ready to use
  └── Google Colab/CARBONETTE for Google Colab.pdf
 
