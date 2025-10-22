@@ -213,17 +213,23 @@ uvicorn main:app --reload --port 8001  <------- this is the command you put in y
 
 
 # Google Colab_Ready
+
  ├── Google Colab/ENGINE - Copy-Paste ready to use
+ 
  └── Google Colab/CARBONETTE for Google Colab.pdf
 
 ## 🧪 Run in Google Colab
 
 Want to try Carbonette in your browser?  
+
+Copy-paste full Google Colab ready code in your new notebook. 
+
 https://github.com/Mihart-web/CARBONETTE/blob/main/Google%20Colab/ENGINE%20-%20Copy-Paste%20ready%20to%20use
 
 No installation required.
 
-Hit Run. Or watch pdf to insert your IRSA datam
+Hit Run. Or watch pdf to insert your IRSA data. 
+
 ## Citation
 If you use Carbonette in your research, please cite:
 Vengher, M. (2025). Carbonette: Automated CNT/HNT Spectral Detection Pipeline. 
