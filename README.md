@@ -4,6 +4,7 @@
 ![Backend](https://img.shields.io/badge/backend-FastAPI-orange)
 ![Engine](https://img.shields.io/badge/engine-Carbonette-blueviolet)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Colab%20%7C%20Linux-lightgrey)
+[![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dJa6AWhzvwLr1PrgWsk-M0FvqMOJ0k52/copy)
 
 <p align="center">
   <img src="fronted/carbonette_site.jpg" alt="Carbonette Website Preview" width="800">
@@ -25,6 +26,13 @@ Carbonette scans infrared spectra and highlights where carbon nanotube (CNT) and
   <img src="fronted/Ercatalogo.jpg" alt="Carbonette Website Preview" width="800">
 </p>
 
+# 🌌 CARBONETTE
+Automated CNT/HNT Spectral Detection Pipeline  
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/drive/1dJa6AWhzvwLr1PrgWsk-M0FvqMOJ0k52/copy)
+
+[![Make a Copy in Colab](https://colab.research.google.com/assets/colab-badge.svg)](
+https://colab.research.google.com/drive/1dJa6AWhzvwLr1PrgWsk-M0FvqMOJ0k52/copy)
 
 ## 🎯 Overview
 CARBONETTE is a sophisticated automated pipeline for detecting Carbon NanoTube (CNT) and Hydrogenated NanoTube (HNT) absorption features in infrared astronomical spectra. The system processes data directly from NASA's IRSA Enhanced Products Catalog and implements a rigorous multi-validation framework to >ensure scientifically robust detections.
