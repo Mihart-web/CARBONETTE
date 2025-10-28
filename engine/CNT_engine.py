@@ -1322,7 +1322,7 @@ else:
 # === EXTRA VERIFICA AUTO su bande "YES": rebin, core-edge, jackknife, poly2
 
 
-#      (Incolla questa sezione dopo la "Core vs Wide confirmation")
+#      (sezione dopo la "Core vs Wide confirmation")
 
 
 # =====================================================================
@@ -1931,7 +1931,7 @@ else:
         print(f"[Saved CSV] {path_extra}")
 # =========================== #
 #  EXTRA: LSF check + Injection–Recovery + Plots (final pro version)
-#  Colab-ready, same logic, adds optional LaTeX/CSV/PDF and visual summaries
+#  adds optional LaTeX/CSV/PDF and visual summaries
 # ===========================
 
 import numpy as np
@@ -1948,7 +1948,7 @@ SAVE_PDF = True
 SAVE_LATEX = True
 OUT_BASE = OBJECT_ID.replace(" ", "_") if 'OBJECT_ID' in globals() else "target"
 
-# ---- Utility identical to your base code ----
+# ---- Utility ----
 def _fit_band_continuum(band, lam, flux, sig, masks_extra=None):
     anchors = band["anchors"]; pivot = band["pivot"]
     mask_lines = in_windows(lam, MASKS_GLOBAL)
@@ -2155,7 +2155,7 @@ BROAD_DEFICITS = [
     ),
 ]
 
-# ---------- 3) Utility locali (identiche nella logica) ----------
+# ---------- 3) Utility locali ----------
 def _local_mask(lam, extra_windows):
     return in_windows(lam, extra_windows) if extra_windows else np.zeros_like(lam, bool)
 
@@ -2236,7 +2236,7 @@ def plot_window(L, F, S, win_def, masks_tuple, C, verdict_key, title_note=""):
     ax2.set_xlabel("Wavelength (μm)")
     ax2.set_ylabel("(C−F)/C")
 
-    # Nota esplicativa (in inglese) per referee
+    # Nota esplicativa (in inglese) 
     ax2.text(0.01, 1.02,
              "Diagnostic: broad-deficit after PAH/silicate masking.\n"
              "If this is null while narrow bands are significant, the narrow signal is unlikely to be a wing.",
@@ -2341,7 +2341,7 @@ if SAVE_PDF and len(figs_for_pdf) > 0:
 # - Non altera le misure CNT strette: è un check extra "broad-deficit" con PAH/SIL esclusi.
 # - Verdetti con le stesse soglie DET_THRESH/MARG_THRESH e √Δχ² del pipeline.
 # - Per cambiare/estendere maschere o finestre, modifica PAH_WINDOWS / SIL_WINDOWS o BROAD_DEFICITS.
-# CERTIFICAZIONE PER BANDA (report compatto "da referee")
+# CERTIFICAZIONE PER BANDA 
 
 # Usa: results, safe_df (se esiste), lsf_df, inj_df, extra_df (se esiste), DET_THRESH, MARG_THRESH, INJ_DEPTHS
 
@@ -2652,9 +2652,8 @@ for R in results:
 
     print(f"  ⇒ Final result: {final}  (base={base_verdict})\n")
 # ============================
-# APPEND-ONLY — Compact summary (table + plots + optional export)
+# Compact summary (table + plots + optional export)
 # Dipendenze: results, lsf_df, inj_df, (safe_df opz.), (extra_df opz.), DET_THRESH, MARG_THRESH
-# NON modifica il codice precedente: ricalcola tutto in lettura.
 # ============================
 import numpy as np
 import pandas as pd
@@ -2756,7 +2755,7 @@ def _final_decision_read(base_sn_ok, base_z_ok, safe_ok, lsf_ok, inj_ok, stab_ok
         return "MARGINAL/REVIEW"
     return "NO"
 
-# ---------- Costruisci la tabella riassuntiva senza toccare il codice esistente ----------
+# ---------- tabella riassuntiva ----------
 rows = []
 for R in results:
     bname = R["band"]; core_rng = R["core"]
@@ -2900,7 +2899,6 @@ except Exception as e:
 
 # ===============================================================
 # CNT/HNT: (2) Template matching, (3) Slope check, (4) Coherence
-# Append-only cell for Colab. Safe with your existing pipeline.
 # Requires: lam, flux, sig, BANDS, MASKS_GLOBAL,
 #           fit_continuum, metrics_core, in_windows,
 #           DET_THRESH, MARG_THRESH, OBJECT_ID
@@ -3015,7 +3013,7 @@ def _corr_pearson(x, y):
     return float(r), float(p)
 
 # ----------------------- 2) TEMPLATE LIBRARY -------------------------------
-# Chen & Li (2022) dominant bands; we synthesize multi-Gaussian optical-depth shapes.
+# Chen & Li (2019) dominant bands; we synthesize multi-Gaussian optical-depth shapes.
 def _make_template(name, peaks_um, fwhm_um=TPL_FWHM, weights=None, lam_min=None, lam_max=None):
     lam0 = float(np.nanmin(lam)) if lam_min is None else float(lam_min)
     lam1 = float(np.nanmax(lam)) if lam_max is None else float(lam_max)
@@ -3032,10 +3030,10 @@ def _make_template(name, peaks_um, fwhm_um=TPL_FWHM, weights=None, lam_min=None,
     return dict(name=name, lam=grid, tau=tau)
 
 TPL = [
-    _make_template("CNT (neutral) — Chen & Li 2022", [5.3, 7.0, 8.8, 9.7, 10.9, 14.2, 16.8]),
-    _make_template("CNT+ (cation) — Chen & Li 2022", [5.2, 7.1, 8.3, 9.2, 13.4, 16.7], weights=[1,1,1,1,1.2,1.1]),
-    _make_template("HNT — Chen & Li 2022",         [3.3, 6.5, 8.2, 10.8, 13.0, 17.2]),
-    _make_template("HNT+ (cation) — Chen & Li 2022",[3.3, 6.6, 8.3, 10.6, 12.8, 17.2], weights=[1,1,1,1,1.2,1.1]),
+    _make_template("CNT (neutral) — Chen & Li 2019", [5.3, 7.0, 8.8, 9.7, 10.9, 14.2, 16.8]),
+    _make_template("CNT+ (cation) — Chen & Li 2019", [5.2, 7.1, 8.3, 9.2, 13.4, 16.7], weights=[1,1,1,1,1.2,1.1]),
+    _make_template("HNT — Chen & Li 2019",         [3.3, 6.5, 8.2, 10.8, 13.0, 17.2]),
+    _make_template("HNT+ (cation) — Chen & Li 2019",[3.3, 6.6, 8.3, 10.6, 12.8, 17.2], weights=[1,1,1,1,1.2,1.1]),
 ]
 
 # ---------------- run per-band measurements (re-use your windows) ----------
@@ -3163,7 +3161,7 @@ for a,bk in pairs:
 co_df = pd.DataFrame(co_rows, columns=["pair","r","p"])
 
 # -------------------------- pretty plots & saves ---------------------------
-# (English axis titles, as requested)
+# (English axis titles)
 def _nice_template_page(ax, L, y, ysig, Lmodel, ymodel, title, zbest):
     ax.errorbar(L, y, ysig, fmt='o', ms=3, alpha=0.85)
     ax.plot(Lmodel, ymodel, lw=1.6)
@@ -3175,7 +3173,7 @@ def _nice_template_page(ax, L, y, ysig, Lmodel, ymodel, title, zbest):
         ax.text(0.02, 0.95, f"Template Δχ²→ z = {zbest:.2f}", transform=ax.transAxes,
                 va="top", ha="left", bbox=dict(fc="white", ec="0.7", alpha=0.8, boxstyle="round,pad=0.25"))
 
-# build one PDF with per-band template overlay if possible
+# build one PDF with per-band template overlay
 figs_tpl = []
 for row in tpl_rows:
     try:
@@ -3307,9 +3305,8 @@ display(slp_df)
 print("\n=== Shape coherence (10.7–12.9–17 µm) ===")
 display(co_df)
 # ===========================
-# CARBONET — EXTRA APPEND-ONLY BLOCK
+# CARBONETTE — Extra
 # Matched-filter, PAH-leak, Benchmark vs Literature, Calibration
-# Safe to paste at the very end of your notebook
 # ===========================
 
 import numpy as np, pandas as pd, math
@@ -3608,7 +3605,7 @@ if not base_df.empty:
     print("[FDR] BH α=0.05 → p* =", thresh if thresh is not None else "none (no discoveries)")
 
 # ===============================================================
-# === LEGEND / INTERPRETATION PAGE (append-only, explanatory) ===
+# === LEGEND / INTERPRETATION PAGE (explanatory) ===
 # ===============================================================
 
 import matplotlib.pyplot as plt
@@ -3752,7 +3749,7 @@ Additional robustness tests:
 All must pass (OK) for a "CONFIRM_STRONG" classification.
 
 ------------------------------------------------------------
-6. Template Matching (Chen & Li 2022)
+6. Template Matching (Chen & Li 2019)
 ------------------------------------------------------------
 Observed residuals are compared with synthetic CNT/HNT spectra predictions from
 Tao Chen & Aigen Li (2019, A&A, "Synthesizing carbon nanotubes in space").
