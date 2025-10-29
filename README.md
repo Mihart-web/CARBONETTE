@@ -180,8 +180,7 @@ The repository includes:
 (Note: the typo “fronted” is intentionally kept for internal compatibility with existing code paths.)
 
 ## 🚀 How to Run the Project
-# Tested with Python 3.11 (Conda-forge environment)
-
+### Tested with Python 3.11 (Conda-forge environment). Developed and tested on Windows 10 (compatible with macOS/Linux environments).
 1. Clone the repository  
    `git clone https://github.com/Mihart-web/CARBONETTE.git`
 
@@ -216,7 +215,8 @@ Anaconda Prompt (Miniconda3) in my case
                                                and the location on your computer where you have it.
                                                in this case, I have the project folder with the engine etc.
                                                on my Desktop, and the folder is called "carbonette"
-
+    cd ~/carbonette For Linux/macOS
+    
 uvicorn main:app --reload --port 8001  <------- this is the command you put in your Python prompt
                                                 to start the FastAPI server
 
@@ -224,6 +224,7 @@ uvicorn main:app --reload --port 8001  <------- this is the command you put in y
 
            http://127.0.0.1:8001       <-------- If you are online, this should say:
                                                      “Carbonette API is alive!”
+                                                     
 
 
 # Google Colab_Ready
