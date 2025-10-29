@@ -180,6 +180,7 @@ The repository includes:
 (Note: the typo “fronted” is intentionally kept for internal compatibility with existing code paths.)
 
 ## 🚀 How to Run the Project
+# Tested with Python 3.11 (Conda-forge environment)
 
 1. Clone the repository  
    `git clone https://github.com/Mihart-web/CARBONETTE.git`
