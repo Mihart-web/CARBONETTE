@@ -243,6 +243,24 @@ No installation required.
 
 Hit Run. Or watch pdf to insert your IRSA data. 
 
+
+## 🤝 Contributing to Carbonette
+
+Contributions are very welcome!
+
+If you'd like to improve **Carbonette** — by adding new spectral modules, extending JWST/MIRI support, refining the interface, or improving documentation — you can help by following these steps:
+
+1. **Fork** this repository and create a new branch for your edits.  
+2. **Implement** your changes (please keep the code clear and well-commented).  
+3. **Submit a Pull Request (PR)** with a short description of what you’ve added or fixed.  
+4. For larger contributions (for example, adding new band templates, validation methods, or backend features), please open an **Issue** first to discuss the idea before coding.  
+
+All accepted contributors will be credited in the changelog and future releases.  
+The project is distributed under the [MIT License](LICENSE), which allows reuse and derivative work — please cite **Carbonette (ASCL:YYYY.NNN)** in any scientific work that uses this code or its results.
+
+Thank you for helping expand the Carbonette pipeline and making CNT/HNT detection more accessible to the community!
+
+
 ## Citation
 If you use Carbonette in your research, please cite:
 Vengher, M. (2025). Carbonette: Automated CNT/HNT Spectral Detection Pipeline. 
