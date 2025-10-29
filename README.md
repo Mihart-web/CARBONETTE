@@ -229,6 +229,19 @@ I suggest to keep main.py in the carbonette main folder.
                                                      “Carbonette API is alive!”
                                                      
 
+### 🔹 Notes
+- `main.py` imports `engine.shim`, so `shim.py` **must stay** inside `engine/`.
+- The actual analysis engine lives in `engine/raw/` (usually one `.py` file that produces outputs).
+- The system expects to read and write everything relative to this structure.  
+  Changing folder names will break imports and file paths.
+- The `run/` and `archive/` folders are automatically created when the pipeline is executed.
+- The frontend HTML (`fronted_index.html`) must stay inside the `frontend/` directory.
+
+### 🔹 Optional
+If you are adding a new module:
+- place helper scripts inside `engine/` (e.g., `engine/irsa_fetch.py`);
+- do **not** put them directly under `engine/raw/` — that folder is reserved for the executable analysis core.
+
 
 # Google Colab_Ready
 
