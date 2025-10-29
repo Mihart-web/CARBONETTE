@@ -86,6 +86,12 @@ CARBONETTE is a sophisticated automated pipeline for detecting Carbon NanoTube (
 - **Slope asymmetry analysis** for feature shape coherence
 - **Cross-band correlation** testing
 
+
+<p align="center">
+  <img src="fronted/Template_matching.jpg" alt="Carbonette Website Preview" width="800">
+</p>
+
+
 ### 📈 **Advanced Statistical Framework**
 - **Benjamini-Hochberg FDR correction** for multiple hypothesis testing
 - **False Discovery Rate control** at α=0.05
