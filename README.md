@@ -217,8 +217,11 @@ Anaconda Prompt (Miniconda3) in my case
                                                on my Desktop, and the folder is called "carbonette"
     cd ~/carbonette For Linux/macOS
     
-uvicorn main:app --reload --port 8001  <------- this is the command you put in your Python prompt
-                                                to start the FastAPI server
+uvicorn main:app --reload --port 8001  <------- this is the command you put in your Python prompt to start the FastAPI
+
+### Please note that if main.py is inside engine folder,                                                
+This input will become : uvicorn engine.main:app --reload --port 8001
+I suggest to keep main.py in the carbonette main folder. 
 
          http://127.0.0.1:8001/docs    <------- this is the site’s main page (paste it in the browser tab)
 
