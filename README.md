@@ -19,7 +19,8 @@ template matching (Chen & Li 2019/2020), slope & shape coherence tests.</p>
 # 🔬 CARBONETTE: Automated CNT/HNT Spectral Detection Pipeline
 Carbonette scans infrared spectra and highlights where carbon nanotube (CNT) and hydrogenated nanotube (HNT) bands might be hiding. It’s a careful filter: it doesn’t declare discoveries, it shows where the data deserve a closer look. This analysis engine is based on publicly available Spitzer spectra (IRSA Enhanced Products) and tests the infrared bands predicted for carbon nanotubes by Chen & Li (2019, 2020). The authors of those studies are not affiliated with or responsible for this project.
 (JWST analyzer extension - work in progress)
-A reproducible end-to-end CNT/HNT spectral analysis engine. 
+<p>A reproducible end-to-end CNT/HNT spectral analysis engine.</p>
+ 
 
 <p>40 SPITZER Irsa Enhanced products Objects analyzed with CARBONETTE </p>
 <p align="center">
@@ -81,7 +82,7 @@ CARBONETTE is a sophisticated automated pipeline for detecting Carbon NanoTube (
 
 
 ### 🎯 **Physical Validation**
-- **Template matching** against established CNT/HNT models (Chen & Li 2020)
+- **Template matching** against established CNT/HNT models (Chen & Li 2019)
 - **Best-fit identification** with Δχ² minimization
 - **Slope asymmetry analysis** for feature shape coherence
 - **Cross-band correlation** testing
