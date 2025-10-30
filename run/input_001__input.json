@@ -1,0 +1,12 @@
+{
+  "object": "CSS_657",
+  "ra": null,
+  "dec": null,
+  "radius_arcsec": 20.0,
+  "options": {
+    "clean": true
+  },
+  "spectrum": null,
+  "source": null,
+  "warnings": []
+}
