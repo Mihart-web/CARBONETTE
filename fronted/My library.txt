@@ -1,0 +1,5 @@
+@router.post("/save_objects")
+def save_objects(cfg: dict = Body(...)):
+    with open("run/user_objects.yml", "w") as f:
+        yaml.dump(cfg, f)
+    return {"status": "ok"}
