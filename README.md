@@ -181,13 +181,15 @@ The repository includes:
 
 
 
-## 🚀 How to Run the Project
+# 🚀 How to Run the Project
+
 ### Tested with Python 3.11 (Conda-forge environment). Developed and tested on Windows 10 (compatible with macOS/Linux environments).
+
 ## COMPATIBLE WITH LINUX AND MACOS
 
 
-# PLEASE OPEN CARBONETTE_TREE.TXT AND FOLLOW THAT ORDER.
-# CREATE FOLDERS WITH THE EXACT NAMES. 
+## PLEASE OPEN CARBONETTE_TREE.TXT AND FOLLOW THAT ORDER.
+## CREATE FOLDERS WITH THE EXACT NAMES. 
 
 Place shim.py and irsa_fetch.py in ./engine/
 Place CNT_engine.py inside ./engine/raw/
