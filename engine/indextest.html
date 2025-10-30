@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<meta charset="utf-8"/>
+<title>Carbonette — test</title>
+<body style="font-family: system-ui; background: #0b0e14; color:#e6e6e6">
+  <h1>Carbonette — test pagina</h1>
+  <p id="ping">Ping API…</p>
+  <button id="run">Run esempio</button>
+  <pre id="out" style="background:#0f131b; padding:10px; border-radius:8px;"></pre>
+
+<script>
+const API = "http://127.0.0.1:8001";
+
+async function ping(){
+  try{
+    const r = await fetch(API + "/");
+    const j = await r.json();
+    document.getElementById('ping').textContent = "API OK: " + JSON.stringify(j);
+  }catch(e){
+    document.getElementById('ping').textContent = "API FAIL: " + e;
+  }
+}
+
+document.getElementById('run').addEventListener('click', async () => {
+  const out = document.getElementById('out');
+  out.textContent = "Analizzo…";
+  try{
+    const r = await fetch(API + "/run", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ object: "HD210918", radius_arcsec: 20 })
+    });
+    const j = await r.json();
+    out.textContent = JSON.stringify(j, null, 2);
+  }catch(e){
+    out.textContent = "Errore: " + e;
+  }
+});
+
+ping();
+</script>
+</body>
+</html>
