@@ -221,7 +221,7 @@ class="glowbtn" href="https://irsa.ipac.caltech.edu/workspace/TMP_wE95AY_32284/G
   Spitzer IRSA Enhanced Products Catalog
 
 
-### put the blue dot on "All sky search" Run Query - you will get full catalog with all objects names and RA/DEC. 
+### IRS Enhanced Products - Select- put the blue dot on "All sky search" Run Query - you will get full catalog with all objects names and RA/DEC. 
 
 
 Control tha API and if is online, open the interface by clikking on the fronted_index. html to open the site. 
