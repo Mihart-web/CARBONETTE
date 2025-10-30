@@ -1,0 +1,52 @@
+CARBONETTE_TREE
+Please follow this order of folders when you save them on your computer:
+Numero di serie del volume: D205-5B66
+C:.
+|   '
+|   CARBONETTE_TREE.txt
+|   curl
+|   dict
+|   indextest.html
+|   irsa_test.py
+|   irsa_to_input.py
+|   main.py
+|   patch_main.py
+|   patch_shim_names.py
+|   promote_input.py
+|   requirements (2).txt
+|   
++---archive
++---engine
+|   |   irsa_fetch.py
+|   |   shim.py
+|   |   __init__.py
+|   |   
+|   +---raw
+|   |       CNT_engine.py
+|   |       
+|   \---__pycache__
+|           irsa_fetch.cpython-311.pyc
+|           shim.cpython-311.pyc
+|           __init__.cpython-311.pyc
+|           
++---frontend
+|       about.html
+|       bg.jpg
+|       catalogo.html
+|       catalogo.jpg
+|       cnt.html
+|       fronted_index.html
+|       My library.txt
+|       object_name_plots.pdf
+|       studies.html
+|       user.html
+|       
++---run
+|       input.tbl
+|       input_001.tbl
+|       input_001__input.json
+|       input_raw_001.tbl
+|       
+\---__pycache__
+        main.cpython-311.pyc
+        
