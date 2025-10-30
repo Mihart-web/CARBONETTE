@@ -212,7 +212,7 @@ Archive will create automatically
 # 5. Open the documentation  
    Go to `http://127.0.0.1:8001/docs` in your browser
 
-### ( if the Spitzer Enhanced Products catalog button doesn't work, substitute the link in the fronted html by opening it in txt.) replace with this link: https://irsa.ipac.caltech.edu/cgi-bin/Gator/nph-dd
+### ( if the Spitzer Enhanced Products catalog button doesn't work, substitute the link in the fronted html by opening it in txt.) replace with this link: [https://irsa.ipac.caltech.edu/cgi-bin/Gator/nph-dd](https://irsa.ipac.caltech.edu/cgi-bin/Gator/nph-scan?submit=Select&projshort=Spitzer)
 
 ### In fronted html, open in txt subsitute the link:
 <a> Analyze section---</a>
