@@ -179,22 +179,35 @@ The repository includes:
 
 (Note: the typo “fronted” is intentionally kept for internal compatibility with existing code paths.)
 
+
+
 ## 🚀 How to Run the Project
 ### Tested with Python 3.11 (Conda-forge environment). Developed and tested on Windows 10 (compatible with macOS/Linux environments).
-1. Clone the repository  
+## COMPATIBLE WITH LINUX AND MACOS
+
+
+# PLEASE OPEN CARBONETTE_TREE.TXT AND FOLLOW THAT ORDER.
+# CREATE FOLDERS WITH THE EXACT NAMES. 
+
+Place shim.py and irsa_fetch.py in ./engine/
+Place CNT_engine.py inside ./engine/raw/
+Create ./run/ folders before running main.py
+Archive will create automatically
+
+# 1. Clone the repository  
    `git clone https://github.com/Mihart-web/CARBONETTE.git`
 
-2. Create and activate a virtual environment  
+# 2. Create and activate a virtual environment  
    `conda create -n carbonette python=3.11`  
    `conda activate carbonette`
 
-3. Install dependencies  
+# 3. Install dependencies  
    `pip install -r requirements.txt`
 
-4. Run the API server  
+# 4. Run the API server  
    `uvicorn main:app --reload --port 8001`
 
-5. Open the documentation  
+# 5. Open the documentation  
    Go to `http://127.0.0.1:8001/docs` in your browser
 
 ( if the Spitzer Enhanced Products catalog button doesn't work, substitute the link in the fronted html by opening it in txt.)
