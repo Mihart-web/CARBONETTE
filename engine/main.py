@@ -27,7 +27,7 @@ RAW_DIR      = (BASE_DIR / "engine" / "raw").resolve()   # dove a volte l'engine
 FRONTEND_DIR = (BASE_DIR / "frontend").resolve();  FRONTEND_DIR.mkdir(exist_ok=True)
 RUN_INPUT    = RUN_DIR / "input.tbl"
 
-APP_VERSION = "0.5.3"
+APP_VERSION = "1.0.2"
 
 # ──────────────────────────────────────────────────────────────────────────────
 # FastAPI APP
