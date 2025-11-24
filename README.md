@@ -24,7 +24,7 @@ Carbonette scans infrared spectra and highlights where carbon nanotube (CNT) and
 <p>A reproducible end-to-end CNT/HNT spectral analysis engine.</p>
  
 
-<p>40 SPITZER Irsa Enhanced products Objects analyzed with CARBONETTE </p>
+## <p> 40 SPITZER Irsa Enhanced products _ Objects analyzed with CARBONETTE _ quik_look </p>
 <p align="center">
   <img src="fronted/Ercatalogo.jpg" alt="Carbonette Website Preview" width="800">
 </p>
