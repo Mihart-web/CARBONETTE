@@ -10,14 +10,16 @@
   <img src="fronted/carbonette_site.jpg" alt="Carbonette Website Preview" width="800">
 </p>
 
+# Carbonette — automated mid-IR spectroscopy for CNT/HNT candidates, known-feature rejection, and full anomaly reporting across Spitzer/IRS spectra.
+
 # CARBONETTE CNT/HNT pipeline v1.0.0
 <p>Author: M. Vengher 2025</p>
 
 <p>Purpose: Automated spectral analysis for CNT/HNT feature detection (5–20 µm)</p>
 <p>Methods: quick-look, SAFE masks, LSF injection-recovery, core–wide coherence,
-template matching (Chen & Li 2019/2020), slope & shape coherence tests.</p>
+template matching (Chen & Li 2019/2020-2022), slope & shape coherence tests.</p>
 # 🔬 CARBONETTE: Automated CNT/HNT Spectral Detection Pipeline
-Carbonette scans infrared spectra and highlights where carbon nanotube (CNT) and hydrogenated nanotube (HNT) bands might be hiding. It’s a careful filter: it doesn’t declare discoveries, it shows where the data deserve a closer look. This analysis engine is based on publicly available Spitzer spectra (IRSA Enhanced Products) and tests the infrared bands predicted for carbon nanotubes by Chen & Li (2019, 2020). The authors of those studies are not affiliated with or responsible for this project.
+Carbonette scans infrared spectra and highlights where carbon nanotube (CNT) and hydrogenated nanotube (HNT) bands might be hiding. It’s a careful filter: it doesn’t declare discoveries, it shows where the data deserve a closer look. This analysis engine is based on publicly available Spitzer spectra (IRSA Enhanced Products) and tests the infrared bands predicted for carbon nanotubes by Chen & Li (2019/2022). The authors of those studies are not affiliated with or responsible for this project.
 (JWST analyzer extension - work in progress)
 <p>A reproducible end-to-end CNT/HNT spectral analysis engine.</p>
  
@@ -34,7 +36,7 @@ https://colab.research.google.com/drive/1dJa6AWhzvwLr1PrgWsk-M0FvqMOJ0k52/copy)
 
 
 ## 🎯 Overview
-CARBONETTE is a sophisticated automated pipeline for detecting Carbon NanoTube (CNT) and Hydrogenated NanoTube (HNT) absorption features in infrared astronomical spectra. The system processes data directly from NASA's IRSA Enhanced Products Catalog and implements a rigorous multi-validation framework to >ensure scientifically robust detections.
+CARBONETTE is an automated pipeline for detecting Carbon NanoTube (CNT) and Hydrogenated NanoTube (HNT) absorption features in infrared astronomical spectra. The system processes data directly from NASA's IRSA Enhanced Products Catalog and implements a rigorous multi-validation framework to >ensure scientifically robust detections.
 
 <p align="center">
   <img src="fronted/carbonette_site2.jpg" alt="Carbonette Website Preview" width="800">
