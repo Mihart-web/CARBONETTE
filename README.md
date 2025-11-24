@@ -15,7 +15,7 @@
 # CARBONETTE CNT/HNT pipeline v1.0.0
 <p>Author: M. Vengher 2025</p>
 
-<p>Purpose: Automated spectral analysis for CNT/HNT feature detection (5–20 µm)</p>
+<p>Purpose: Automated spectral analysis for CNT/HNT feature detection (5–34 µm)</p>
 <p>Methods: quick-look, SAFE masks, LSF injection-recovery, core–wide coherence,
 template matching (Chen & Li 2019/2020-2022), slope & shape coherence tests.</p>
 
