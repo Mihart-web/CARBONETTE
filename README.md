@@ -7,7 +7,7 @@
 [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1dJa6AWhzvwLr1PrgWsk-M0FvqMOJ0k52/copy)
 
 <p align="center">
-  <img src="fronted/carbonette_site.jpg" alt="Carbonette Website Preview" width="800">
+  <img src="fronted/V899.jpg" alt="Carbonette Website Preview" width="800">
 </p>
 
 # Carbonette — automated mid-IR spectroscopy for CNT/HNT candidates, known-feature rejection, and full anomaly reporting across Spitzer/IRS spectra.
@@ -23,6 +23,10 @@ template matching (Chen & Li 2019/2020-2022), slope & shape coherence tests.</p>
 (JWST analyzer extension - work in progress)
 # <p>A reproducible end-to-end CNT/HNT spectral analysis tool.</p>
  
+
+<p align="center">
+  <img src="fronted/carbonette_site.jpg" alt="Carbonette Website Preview" width="800">
+</p>
 
 ## <p> 40 SPITZER Irsa Enhanced products _ Objects analyzed with CARBONETTE _ quik_look </p>
 <p align="center">
