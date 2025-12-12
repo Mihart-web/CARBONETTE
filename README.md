@@ -10,7 +10,7 @@
   <img src="fronted/carbonette_site.jpg" alt="Carbonette Website Preview" width="800">
 </p>
 
-# Carbonette — automated mid-IR spectroscopy for CNT/HNT candidates, known-feature rejection, and full anomaly reporting across Spitzer/IRS spectra.
+# Carbonette — automated mid-IR spectroscopy for CNT/HNT candidates, known-feature rejection, and full anomaly reporting across Spitzer/IRS spectra. This tool is a conservative hypothesis-testing and rejection pipeline, not a discovery engine.
 
 # CARBONETTE CNT/HNT pipeline v1.0.0
 <p>Author: M. Vengher 2025</p>
@@ -20,6 +20,7 @@
 template matching (Chen & Li 2019_2022), slope & shape coherence tests.</p>
 <p>The pipeline is deliberately conservative and biased towards non-detections.
 For an object to be a candidate who might have CNT/HNT/NT, the "YES" detection must pass all tests.</p> 
+
 ### Carbonette scans infrared spectra and highlights where carbon nanotube (CNT) and hydrogenated nanotube (HNT) bands might be hiding. It’s a careful filter: it doesn’t declare discoveries, it shows where the data deserve a closer look. This analysis engine is based on publicly available Spitzer spectra (IRSA Enhanced Products) and tests the infrared bands predicted for carbon nanotubes by Chen & Li (2019/2022). The authors of those studies are not affiliated with or responsible for this project.
 (JWST analyzer extension - work in progress)
 # <p>A reproducible end-to-end CNT/HNT spectral analysis tool.</p>
